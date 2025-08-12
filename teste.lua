@@ -42,39 +42,63 @@ local function searchFruits()
 end
 
 local function storeFruit()
-    local backpack = player:WaitForChild("Backpack")
-    local character = player.Character or player.CharacterAdded:Wait()
-
-    -- Se estiver segurando algo, devolve para o backpack
-    for _, tool in pairs(character:GetChildren()) do
-        if tool:IsA("Tool") then
-            tool.Parent = backpack
-        end
-    end
-
-    -- Agora percorre o backpack
-    for _, tool in pairs(backpack:GetChildren()) do
-        if tool:IsA("Tool") and string.find(tool.Name:lower(), "fruit") then
-            tool.Parent = character
-            task.wait(0.1)
-            tool:Activate()
+    local maxTentativas = 2 -- cada execução do storeFruit tenta 2 vezes
+    local tentativa = 0
+    while tentativa < maxTentativas do
+        tentativa += 1
+        print(string.format("[storeFruit] Tentativa interna %d de %d", tentativa, maxTentativas))
+        local backpack = player:FindFirstChild("Backpack")
+        if not backpack then
+            warn("[storeFruit] Backpack não encontrada")
             task.wait(1)
-
-            local mainButton = MainUI:WaitForChild("MainFrame") 
-            local DialogueFrame = mainButton:WaitForChild("Dialogue") 
-            local StoreButton = DialogueFrame:WaitForChild("Option3") 
-
-            for _, connection in pairs(getconnections(StoreButton.MouseButton1Click)) do
-                connection:Fire()
-            end
-            
-            return true
+            continue
         end
+        local character = player.Character or player.CharacterAdded:Wait()
+        for _, tool in pairs(backpack:GetChildren()) do
+            if tool:IsA("Tool") and string.find(tool.Name:lower(), "fruit") then
+                tool.Parent = character
+                task.wait(0.2)
+                pcall(function() tool:Activate() end)
+                print("[storeFruit] Equipou e usou:", tool.Name)
+                task.wait(2)
+                local playerGui = player:FindFirstChild("PlayerGui")
+                if not playerGui then return true end
+                local mainGui = playerGui:FindFirstChild("MainUI")
+                if not mainGui then return true end
+                local mainButton = mainGui:FindFirstChild("MainFrame")
+                if not mainButton then return true end
+                local optionsFrame = mainButton:FindFirstChild("Dialogue")
+                if not optionsFrame then return true end
+                task.wait(2)
+                local optionButton = optionsFrame:FindFirstChild("Option3")
+                if not optionButton then return true end
+                if type(getconnections) == "function" then
+                    local ok, conns = pcall(function()
+                        return getconnections(optionButton.MouseButton1Click)
+                    end)
+                    if ok and conns then
+                        for _, connection in pairs(conns) do
+                            if type(connection.Function) == "function" then
+                                pcall(connection.Function)
+                            end
+                        end
+                    else
+                        warn("[storeFruit] getconnections retornou nil ou falhou")
+                    end
+                end
+                if string.find(tool.Name:lower(), "poison") or string.find(tool.Name:lower(), "orbit") then
+                    print("[storeFruit] Achou mítica")
+                    mythicalFound = true
+                end
+                return true
+            end
+        end
+        print("[storeFruit] Nenhuma fruta encontrada no backpack. Tentando novamente...")
+        task.wait(1.5)
     end
-
+    print("[storeFruit] Nenhuma fruta encontrada após " .. maxTentativas .. " tentativas internas.")
     return false
 end
-
 
 local function teleportToRandomServer()
     local success, servers = pcall(function()
