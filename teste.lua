@@ -1,33 +1,21 @@
-local function loadChar()
-    -- LocalScript dentro de StarterPlayerScripts
-    local player = game.Players.LocalPlayer
+ local player = game.Players.LocalPlayer
     local playerGui = player:WaitForChild("PlayerGui")
 
-    -- Espera a GUI carregar
-    local screenGui = playerGui:WaitForChild("Preload") -- nome da sua ScreenGui
-    local playButton = screenGui:WaitForChild("ChooseTeam").PirateButton -- nome do botão
+local function loadChar()
+    local PreloadUI = playerGui:WaitForChild("Preload") -- nome da sua ScreenGui
+    local PirateButton = PreloadUI:WaitForChild("ChooseTeam").PirateButton -- nome do botão
 
     -- Simula clique assim que entrar
     task.wait(1) -- pequeno atraso para garantir que tudo carregou
-    for _, connection in pairs(getconnections(playButton.MouseButton1Click)) do
+    for _, connection in pairs(getconnections(PirateButton.MouseButton1Click)) do
         connection.Function() -- chama o que estaria no clique
     end 
     print("Player entrou no jogo!")
 end
 
-local player = game.Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-
--- Espera a GUI carregar
-local screenGui = playerGui:FindFirstChild("Preload") -- nome da sua ScreenGui
-if not screenGui then
-    print("Já clicou em play!")
-else
-    local playButton = screenGui:WaitForChild("ChooseTeam").PirateButton -- nome do botão
-    while not playButton.Visible do
-        task.wait(1)
-    end
-    print("Botões carregaram!")
+while not playerGui:FindFirstChild("Cmdr") or playerGui:FindFirstChild("Cmdr") do
+    print("Ainda não deu play!")
+    loadChar()
+    task.wait(1)
 end
-
-loadChar()
+print("no jogo!")
