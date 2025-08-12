@@ -102,26 +102,29 @@ local function teleportToRandomServer()
     end
 end
 
-task.wait(10) -- Esperar um pouco
-print("Script V0.0.1
+task.wait(2) -- Pequeno delay antes de tudo, só pra evitar corrida
+print("Script V0.0.1")
+
 if playerGui:FindFirstChild("Preload") then
     repeat
         loadChar()
-        task.wait(.1)
+        task.wait(0.1)
     until playerGui:FindFirstChild("Cmdr") or playerGui:FindFirstChild("Custom Inventory")
     print("Jogo carregado!")
-else 
+else
     print("Player já deu start!")
 end
+
 task.wait(10)
 searchFruits()
 task.wait(10)
 storeFruit()
 task.wait(10)
+
 while true do
     local ok = teleportToRandomServer()
     if ok then
         break
     end
-    task.wait(3) -- espera 3s antes de tentar de novo
+    task.wait(3)
 end
