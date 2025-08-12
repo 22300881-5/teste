@@ -42,62 +42,81 @@ local function searchFruits()
 end
 
 local function storeFruit()
-    local maxTentativas = 2 -- cada execução do storeFruit tenta 2 vezes
-    local tentativa = 0
-    while tentativa < maxTentativas do
-        tentativa += 1
-        print(string.format("[storeFruit] Tentativa interna %d de %d", tentativa, maxTentativas))
-        local backpack = player:FindFirstChild("Backpack")
-        if not backpack then
-            warn("[storeFruit] Backpack não encontrada")
-            task.wait(1)
-            continue
-        end
+    local success, result = pcall(function()
+        local backpack = player:WaitForChild("Backpack", 5)
         local character = player.Character or player.CharacterAdded:Wait()
+
+        -- Move qualquer tool da mão para o backpack
+        for _, tool in pairs(character:GetChildren()) do
+            if tool:IsA("Tool") then
+                tool.Parent = backpack
+            end
+        end
+
+        -- Procura fruta no backpack
         for _, tool in pairs(backpack:GetChildren()) do
             if tool:IsA("Tool") and string.find(tool.Name:lower(), "fruit") then
+                print("Fruta encontrada: "..tool.Name)
+
+                -- Equipa a fruta
                 tool.Parent = character
                 task.wait(0.2)
-                pcall(function() tool:Activate() end)
-                print("[storeFruit] Equipou e usou:", tool.Name)
-                task.wait(2)
-                local playerGui = player:FindFirstChild("PlayerGui")
-                if not playerGui then return true end
-                local mainGui = playerGui:FindFirstChild("MainUI")
-                if not mainGui then return true end
-                local mainButton = mainGui:FindFirstChild("MainFrame")
-                if not mainButton then return true end
-                local optionsFrame = mainButton:FindFirstChild("Dialogue")
-                if not optionsFrame then return true end
-                task.wait(2)
-                local optionButton = optionsFrame:FindFirstChild("Option3")
-                if not optionButton then return true end
-                if type(getconnections) == "function" then
-                    local ok, conns = pcall(function()
-                        return getconnections(optionButton.MouseButton1Click)
-                    end)
-                    if ok and conns then
-                        for _, connection in pairs(conns) do
-                            if type(connection.Function) == "function" then
-                                pcall(connection.Function)
-                            end
-                        end
-                    else
-                        warn("[storeFruit] getconnections retornou nil ou falhou")
+                tool:Activate()
+                task.wait(1)
+
+                -- Acessa UI de guardar
+                local mainButton = MainUI:FindFirstChild("MainFrame")
+                if not mainButton then
+                    warn("MainFrame não encontrado!")
+                    return false
+                end
+
+                local DialogueFrame = mainButton:FindFirstChild("Dialogue")
+                if not DialogueFrame then
+                    warn("Dialogue não encontrado!")
+                    return false
+                end
+
+                local StoreButton = DialogueFrame:FindFirstChild("Option3")
+                if not StoreButton then
+                    warn("Option3 (Guardar) não encontrado!")
+                    return false
+                end
+
+                -- Dispara evento de click
+                for _, connection in pairs(getconnections(StoreButton.MouseButton1Click)) do
+                    if connection.Function then
+                        connection.Function()
+                    elseif connection.Fire then
+                        connection:Fire()
                     end
                 end
-                if string.find(tool.Name:lower(), "poison") or string.find(tool.Name:lower(), "orbit") then
-                    print("[storeFruit] Achou mítica")
-                    mythicalFound = true
+
+                -- Aguarda fruta sair do inventário
+                local startTime = tick()
+                while backpack:FindFirstChild(tool.Name) or character:FindFirstChild(tool.Name) do
+                    if tick() - startTime > 5 then
+                        warn("Timeout ao tentar guardar fruta!")
+                        return false
+                    end
+                    task.wait(0.2)
                 end
+
+                print("Fruta guardada com sucesso!")
                 return true
             end
         end
-        print("[storeFruit] Nenhuma fruta encontrada no backpack. Tentando novamente...")
-        task.wait(1.5)
+
+        print("Nenhuma fruta para guardar.")
+        return false
+    end)
+
+    if not success then
+        warn("Erro no storeFruit: ", result)
+        return false
     end
-    print("[storeFruit] Nenhuma fruta encontrada após " .. maxTentativas .. " tentativas internas.")
-    return false
+
+    return result
 end
 
 local function teleportToRandomServer()
@@ -127,7 +146,7 @@ local function teleportToRandomServer()
 end
 
 task.wait(2) -- Pequeno delay antes de tudo, só pra evitar corrida
-print("Script V0.0.1")
+print("Script V0.0.2")
 
 if playerGui:FindFirstChild("Preload") then
     repeat
