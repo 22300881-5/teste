@@ -14,7 +14,7 @@ local function loadChar()
     print(loadTries.."x tentando dar play...")
 end
 
-while not playerGui:FindFirstChild("Cmdr") or playerGui:FindFirstChild("Cmdr") do
+while not playerGui:FindFirstChild("Cmdr") or playerGui:FindFirstChild("Custom Inventory") do
     loadChar()
     task.wait(1)
 end
