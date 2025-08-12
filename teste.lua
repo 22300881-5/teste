@@ -3,6 +3,7 @@
 
 local loadTries = 0
 local function loadChar()
+    loadTries += 1
     local PreloadUI = playerGui:WaitForChild("Preload") -- nome da sua ScreenGui
     local PirateButton = PreloadUI:WaitForChild("ChooseTeam").PirateButton -- nome do botão
 
