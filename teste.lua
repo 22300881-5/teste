@@ -45,26 +45,36 @@ local function storeFruit()
     local backpack = player:WaitForChild("Backpack")
     local character = player.Character or player.CharacterAdded:Wait()
 
+    -- Se estiver segurando algo, devolve para o backpack
+    for _, tool in pairs(character:GetChildren()) do
+        if tool:IsA("Tool") then
+            tool.Parent = backpack
+        end
+    end
+
+    -- Agora percorre o backpack
     for _, tool in pairs(backpack:GetChildren()) do
-        print(tool.Name)
         if tool:IsA("Tool") and string.find(tool.Name:lower(), "fruit") then
             tool.Parent = character
             task.wait(0.1)
             tool:Activate()
             task.wait(1)
+
             local mainButton = MainUI:WaitForChild("MainFrame") 
-                local DialogueFrame = mainButton:WaitForChild("Dialogue") 
-                    local StoreButton = DialogueFrame:WaitForChild("Option3") 
+            local DialogueFrame = mainButton:WaitForChild("Dialogue") 
+            local StoreButton = DialogueFrame:WaitForChild("Option3") 
 
             for _, connection in pairs(getconnections(StoreButton.MouseButton1Click)) do
                 connection:Fire()
             end
             
-            return true 
+            return true
         end
     end
+
     return false
 end
+
 
 local function teleportToRandomServer()
     local success, servers = pcall(function()
