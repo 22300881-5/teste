@@ -1,1 +1,2 @@
-return print("Testando...")
+
+print("Testando...")
