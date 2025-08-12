@@ -112,13 +112,15 @@ if playerGui:FindFirstChild("Preload") then
 else 
     print("Player já deu start!")
 end
+task.wait(5)
 searchFruits()
+task.wait(5)
 storeFruit()
-task.wait(2.5)
+task.wait(5)
 while true do
     local ok = teleportToRandomServer()
     if ok then
         break
     end
-    wait(3) -- espera 3s antes de tentar de novo
+    task.wait(3) -- espera 3s antes de tentar de novo
 end
