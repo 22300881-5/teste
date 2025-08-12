@@ -105,4 +105,10 @@ end
 searchFruits()
 storeFruit()
 task.wait(2.5)
-teleportToRandomServer()
+while true do
+    local ok = teleportToRandomServer()
+    if ok then
+        break
+    end
+    wait(3) -- espera 3s antes de tentar de novo
+end
