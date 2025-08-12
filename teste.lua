@@ -1,7 +1,12 @@
+local TeleportService = game:GetService("TeleportService")
+local HttpService = game:GetService("HttpService")
+
 local player = game.Players.LocalPlayer
     local playerGui = player:WaitForChild("PlayerGui")
         local MainUI = playerGui:WaitForChild("MainUI") -- nome da ScreenGui principal
 local droppedToolsFolder = workspace.Playability.DroppedTools
+local placeId = game.PlaceId
+local currentJobId = game.JobId
 
 local loadTries = 0
 local function loadChar()
@@ -78,7 +83,7 @@ local function teleportToRandomServer()
 
         if #possibleServers > 0 then
             local randomServerId = possibleServers[math.random(1, #possibleServers)]
-            TeleportService:TeleportToPlaceInstance(placeId, randomServerId, localPlayer)
+            TeleportService:TeleportToPlaceInstance(placeId, randomServerId, player)
         else
             warn("Nenhum servidor disponível diferente do atual.")
         end
