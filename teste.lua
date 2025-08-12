@@ -92,6 +92,7 @@ local function teleportToRandomServer()
     end
 end
 
+task.wait(10) -- Esperar um pouco
 if playerGui:FindFirstChild("Preload") then
     repeat
         loadChar()
