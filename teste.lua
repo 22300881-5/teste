@@ -24,10 +24,10 @@ if not screenGui then
     print("Já clicou em play!")
 else
     local playButton = screenGui:WaitForChild("ChooseTeam").PirateButton -- nome do botão
-    while not playButton do
+    while not playButton.Visible do
         task.wait(1)
     end
-print("Botões carregaram!")
+    print("Botões carregaram!")
 end
 
 loadChar()
