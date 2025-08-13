@@ -42,81 +42,37 @@ local function searchFruits()
 end
 
 local function storeFruit()
-    local success, result = pcall(function()
-        local backpack = player:WaitForChild("Backpack", 5)
-        local character = player.Character or player.CharacterAdded:Wait()
+    local backpack = player:WaitForChild("Backpack")
+    local character = player.Character or player.CharacterAdded:Wait()
 
-        -- Move qualquer tool da mão para o backpack
-        for _, tool in pairs(character:GetChildren()) do
-            if tool:IsA("Tool") then
-                tool.Parent = backpack
-            end
+    -- Se estiver segurando algo, devolve para o backpack
+    for _, tool in pairs(character:GetChildren()) do
+        if tool:IsA("Tool") then
+            tool.Parent = backpack
         end
-
-        -- Procura fruta no backpack
-        for _, tool in pairs(backpack:GetChildren()) do
-            if tool:IsA("Tool") and string.find(tool.Name:lower(), "fruit") then
-                print("Fruta encontrada: "..tool.Name)
-
-                -- Equipa a fruta
-                tool.Parent = character
-                task.wait(0.2)
-                tool:Activate()
-                task.wait(1)
-
-                -- Acessa UI de guardar
-                local mainButton = MainUI:FindFirstChild("MainFrame")
-                if not mainButton then
-                    warn("MainFrame não encontrado!")
-                    return false
-                end
-
-                local DialogueFrame = mainButton:FindFirstChild("Dialogue")
-                if not DialogueFrame then
-                    warn("Dialogue não encontrado!")
-                    return false
-                end
-
-                local StoreButton = DialogueFrame:FindFirstChild("Option3")
-                if not StoreButton then
-                    warn("Option3 (Guardar) não encontrado!")
-                    return false
-                end
-
-                -- Dispara evento de click
-                for _, connection in pairs(getconnections(StoreButton.MouseButton1Click)) do
-                    if connection.Function then
-                        connection.Function()
-                    elseif connection.Fire then
-                        connection:Fire()
-                    end
-                end
-
-                -- Aguarda fruta sair do inventário
-                local startTime = tick()
-                while backpack:FindFirstChild(tool.Name) or character:FindFirstChild(tool.Name) do
-                    if tick() - startTime > 5 then
-                        warn("Timeout ao tentar guardar fruta!")
-                        return false
-                    end
-                    task.wait(0.2)
-                end
-
-                print("Fruta guardada com sucesso!")
-                return true
-            end
-        end
-
-        print("Nenhuma fruta para guardar.")
-        return false
-    end)
-
-    if not success then
-        warn("Erro no storeFruit: ", result)
-        return false
     end
 
-    return result
+    -- Agora percorre o backpack
+    for _, tool in pairs(backpack:GetChildren()) do
+        if tool:IsA("Tool") and string.find(tool.Name:lower(), "fruit") then
+            tool.Parent = character
+            task.wait(0.1)
+            tool:Activate()
+            task.wait(1)
+
+            local mainButton = MainUI:WaitForChild("MainFrame") 
+            local DialogueFrame = mainButton:WaitForChild("Dialogue") 
+            local StoreButton = DialogueFrame:WaitForChild("Option3") 
+
+            for _, connection in pairs(getconnections(StoreButton.MouseButton1Click)) do
+                connection:Fire()
+            end
+            
+            return true
+        end
+    end
+
+    return false
 end
 
 local function teleportToRandomServer()
