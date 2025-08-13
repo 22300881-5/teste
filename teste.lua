@@ -4,7 +4,6 @@ local HttpService = game:GetService("HttpService")
 local player = game.Players.LocalPlayer
     local playerGui = player:WaitForChild("PlayerGui")
         local MainUI = playerGui:WaitForChild("MainUI") -- nome da ScreenGui principal
-local droppedToolsFolder = workspace.Playability.DroppedTools
 local placeId = game.PlaceId
 local currentJobId = game.JobId
 
@@ -23,6 +22,7 @@ end
 
 local function searchFruits()
     local totalFruits = 0
+    local droppedToolsFolder = workspace.Playability.DroppedTools
     for _, tool in pairs(droppedToolsFolder:GetChildren()) do
         if string.find(tool.Name, "Fruit") then
             totalFruits += 1
