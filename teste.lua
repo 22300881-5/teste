@@ -160,8 +160,11 @@ end
 
 task.wait(10)
 searchFruits()
-task.wait(10)
-storeFruit()
+task.wait(5)
+for count = 1, 3 do
+    storeFruit()
+    task.wait(1)
+end
 task.wait(10)
 
 while true do
