@@ -51,7 +51,7 @@ local function storeFruit()
             tool.Parent = backpack
         end
     end
-
+    task.wait(1)
     -- Agora percorre o backpack
     for _, tool in pairs(backpack:GetChildren()) do
         if tool:IsA("Tool") and string.find(tool.Name:lower(), "fruit") then
