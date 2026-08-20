@@ -1,3 +1,4 @@
+local MonsterFolder = workspace:WaitForChild("Monster")
 return {
     ["Carrot"] = {
         {
