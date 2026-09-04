@@ -33,7 +33,8 @@ return {
     {lvl = 4875, Name = "Kill 1 Prisoner of Gravity", NPC = "Prisoner of Gravity"},
 
 
-        {lvl = 4875, Name = "Kill 1 Prisoner of Gravity", NPC = "Prisoner of Gravity"},
+    
+    {lvl = 4875, Name = "Kill 1 Prisoner of Gravity", NPC = "Prisoner of Gravity"},
 
 
 
