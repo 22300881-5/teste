@@ -1,14 +1,17 @@
-return {
-    ["Soldier"] = {
-        Location = CFrame.new(-4311,57,40),
+local MonsterFolder = workspace:WaitForChild("Monster")
+local Data = {
+     ["Deep Diver"] = {
+        Location = CFrame.new(1683, 35, 892),
         Folder_Path = workspace.Monster.Mon
     },
-    ["Clown Pirate"] = {
-        Location = CFrame.new(-4311,57,40),
-        Folder_Path = workspace.Monster.Mon
+    ["Fugitive"] = {
+        Location = CFrame.new(2713, 35, 1049),
+        Folder_Path = workspace.Monster.Boss
     },
-    ["Gazelle Man"] = {
-        Location = CFrame.new(-4311,57,40),
+    ["Deep one Villager"] = {
+        Location = CFrame.new(3427, 203, 697),
         Folder_Path = workspace.Monster.Boss
     },
 }
+
+return Data
