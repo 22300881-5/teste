@@ -246,34 +246,30 @@ local Materials = {
         ["Rusted Scrap"] = {
             ["Clown Swordman [Lv. 50]"] = NPCs["Sea 1"]["Clown Swordman [Lv. 50]"],
             ["Snow Soldier [Lv. 400]"] = NPCs["Sea 1"]["Snow Soldier [Lv. 400]"],
-        },
-        --[[ 
-        
+        },        
         ["Leather]"] = {
-            ["Commander"] = NPCs["Commander"]
+            ["Commander [Lv. 100]"] = NPCs["Commander [Lv. 100]"]
         },
         ["Shark Canine]"] = {
-            ["Shark Man"] = NPCs["Shark Man"],
-            ["Karate Fishman"] = NPCs["Karate Fishman"]
+            ["Shark Man [Lv. 230]"] = NPCs["Shark Man [Lv. 230]"],
+            ["Karate Fishman [Lv. 200]"] = NPCs["Karate Fishman [Lv. 200]"]
         },
         ["Thief Rag]"] = {
-            ["Desert Marauder"] = NPCs["Desert Marauder"],
-            ["Sand Bandit"] = NPCs["Sand Bandit"]
+            ["Desert Marauder [Lv. 675]"] = NPCs["Desert Marauder [Lv. 675]"],
+            ["Sand Bandit [Lv. 575]"] = NPCs["Sand Bandit [Lv. 575]"]
         },
         ["Feather]"] = {
-            ["Sky Soldier"] = NPCs["Sky Soldier"],
-            ["Cloud Warrior"] = NPCs["Cloud Warrior"]
+            ["Sky Soldier [Lv. 800]"] = NPCs["Sky Soldier [Lv. 800]"],
+            ["Cloud Warrior [Lv. 900]"] = NPCs["Cloud Warrior [Lv. 900]"]
         },
         ["Gunpowder]"] = {
-            ["Nautical soldier"] = NPCs["Nautical soldier"],
-            ["Naval personnel"] = NPCs["Naval personnel"],
-            ["Naval soldier"] = NPCs["Naval soldier"]
+            ["Nautical soldier [Lv. 1350]"] = NPCs["Nautical soldier [Lv. 1350]"],
+            ["Naval personnel [Lv. 1200]"] = NPCs["Naval personnel [Lv. 1200]"],
+            ["Naval soldier [Lv. 1400]"] = NPCs["Naval soldier [Lv. 1400]"]
         },
         ["Twilight Orb]"] = {
-            ["Shadow Master"] = NPCs["Shadow Master"]
+            ["Shadow Master [Lv. 1650]"] = NPCs["Shadow Master [Lv. 1650]"]
         },
-        
-        ]]
     },
     ["Sea 2"] = {
 
