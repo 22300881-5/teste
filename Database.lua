@@ -248,27 +248,27 @@ local Materials = {
             ["Snow Soldier [Lv. 400]"] = NPCs["Sea 1"]["Snow Soldier [Lv. 400]"],
         },        
         ["Leather"] = {
-            ["Commander [Lv. 100]"] = NPCs["Commander [Lv. 100]"]
+            ["Commander [Lv. 100]"] = NPCs["Sea 1"]["Commander [Lv. 100]"]
         },
         ["Shark Canine"] = {
-            ["Shark Man [Lv. 230]"] = NPCs["Shark Man [Lv. 230]"],
-            ["Karate Fishman [Lv. 200]"] = NPCs["Karate Fishman [Lv. 200]"]
+            ["Shark Man [Lv. 230]"] = NPCs["Sea 1"]["Shark Man [Lv. 230]"],
+            ["Karate Fishman [Lv. 200]"] = NPCs["Sea 1"]["Karate Fishman [Lv. 200]"]
         },
         ["Thief Rag"] = {
-            ["Desert Marauder [Lv. 675]"] = NPCs["Desert Marauder [Lv. 675]"],
-            ["Sand Bandit [Lv. 575]"] = NPCs["Sand Bandit [Lv. 575]"]
+            ["Desert Marauder [Lv. 675]"] = NPCs["Sea 1"]["Desert Marauder [Lv. 675]"],
+            ["Sand Bandit [Lv. 575]"] = NPCs["Sea 1"]["Sand Bandit [Lv. 575]"]
         },
         ["Feather"] = {
-            ["Sky Soldier [Lv. 800]"] = NPCs["Sky Soldier [Lv. 800]"],
-            ["Cloud Warrior [Lv. 900]"] = NPCs["Cloud Warrior [Lv. 900]"]
+            ["Sky Soldier [Lv. 800]"] = NPCs["Sea 1"]["Sky Soldier [Lv. 800]"],
+            ["Cloud Warrior [Lv. 900]"] = NPCs["Sea 1"]["Cloud Warrior [Lv. 900]"]
         },
         ["Gunpowder"] = {
-            ["Nautical soldier [Lv. 1350]"] = NPCs["Nautical soldier [Lv. 1350]"],
-            ["Naval personnel [Lv. 1200]"] = NPCs["Naval personnel [Lv. 1200]"],
-            ["Naval soldier [Lv. 1400]"] = NPCs["Naval soldier [Lv. 1400]"]
+            ["Nautical soldier [Lv. 1350]"] = NPCs["Sea 1"]["Nautical soldier [Lv. 1350]"],
+            ["Naval personnel [Lv. 1200]"] = NPCs["Sea 1"]["Naval personnel [Lv. 1200]"],
+            ["Naval soldier [Lv. 1400]"] = NPCs["Sea 1"]["Naval soldier [Lv. 1400]"]
         },
         ["Twilight Orb"] = {
-            ["Shadow Master [Lv. 1650]"] = NPCs["Shadow Master [Lv. 1650]"]
+            ["Shadow Master [Lv. 1650]"] = NPCs["Sea 1"]["Shadow Master [Lv. 1650]"]
         },
     },
     ["Sea 2"] = {
