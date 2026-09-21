@@ -1,5 +1,5 @@
 local NPCs = {
-    ["Sea 1]"] = {
+    ["Sea 1"] = {
     --// Starter Island
         ["Soldier [Lv. 1]"] = {
             Location = CFrame.new(-1893,49,-4582),
@@ -230,16 +230,16 @@ local NPCs = {
             Folder_Path = "Boss"
         },
     },
-    ["Sea 2]"] = {
+    ["Sea 2"] = {
 
     },
-    ["Sea 3]"] = {
+    ["Sea 3"] = {
 
     },
 }
 
 local Materials = {
-    ["Sea 1]"] = {
+    ["Sea 1"] = {
         ["Fresh Fish]"] = {
             NPCs["Sea 1"]["Fighter Fishman [Lv. 180]"],
         },
@@ -275,10 +275,10 @@ local Materials = {
         
         ]]
     },
-    ["Sea 2]"] = {
+    ["Sea 2"] = {
 
     },
-    ["Sea 3]"] = {
+    ["Sea 3"] = {
 
     },
 }
