@@ -1,4 +1,4 @@
-local Optimization = {}
+local Performance = {}
 
 local Enabled = false
 local OriginalValues = {}
@@ -8,28 +8,61 @@ local Flags = {
 
     DFIntDebugFRMQualityLevelOverride = "1",
 
-    FIntFRMMinGrassDistance = "0",
-    FIntFRMMaxGrassDistance = "0",
-
-    DFFlagTextureQualityOverrideEnabled = "True",
-    DFIntTextureQualityOverride = "1",
-
     FFlagDisablePostFx = "True",
 
     FIntRenderShadowIntensity = "0",
+
+    DFIntCullFactorPixelThresholdShadowMapHighQuality = "2147483647",
+    DFIntCullFactorPixelThresholdShadowMapLowQuality = "2147483647",
 
     DFIntCSGLevelOfDetailSwitchingDistance = "0",
     DFIntCSGLevelOfDetailSwitchingDistanceL12 = "0",
     DFIntCSGLevelOfDetailSwitchingDistanceL23 = "0",
     DFIntCSGLevelOfDetailSwitchingDistanceL34 = "0",
+
+    FIntRenderLocalLightUpdatesMax = "8",
+    FIntRenderLocalLightUpdatesMin = "6",
+    FIntRenderLocalLightFadeInMs = "0",
+
+    FIntTerrainArraySliceSize = "4",
+
+    DFFlagTextureQualityOverrideEnabled = "True",
+    DFIntTextureQualityOverride = "0",
+
+    DFIntPerformanceControlTextureQualityBestUtility = "-1",
+
+    FIntFRMMinGrassDistance = "0",
+    FIntFRMMaxGrassDistance = "0",
+    FIntRenderGrassDetailStrands = "0",
+
+    DFIntMaxActiveAnimationTracks = "0",
+
+    DFIntTextureCompositorActiveJobs = "0",
+
+    FIntDebugTextureManagerSkipMips = "8",
+
+    DFFlagDebugPauseVoxelizer = "True",
+
+    FFlagFastGPULightCulling3 = "True",
+    FFlagNewLightAttenuation = "True",
 }
 
-local function SetFlag(Name, Value)
-    local Success, Current = pcall(function()
+local function GetFlag(Name)
+    local Success, Value = pcall(function()
         return getfflag(Name)
     end)
 
-    if not Success or Current == nil then
+    if not Success then
+        return nil
+    end
+
+    return Value
+end
+
+local function SetFlag(Name, Value)
+    local Current = GetFlag(Name)
+
+    if Current == nil then
         return false
     end
 
@@ -37,19 +70,14 @@ local function SetFlag(Name, Value)
         OriginalValues[Name] = Current
     end
 
-    local Changed, Error = pcall(function()
+    local Success = pcall(function()
         setfflag(Name, Value)
     end)
 
-    if not Changed then
-        warn("Falha ao alterar FFlag:", Name, Error)
-        return false
-    end
-
-    return true
+    return Success
 end
 
-function Optimization.Enable()
+function Performance.Enable()
     if Enabled then
         return
     end
@@ -61,32 +89,44 @@ function Optimization.Enable()
     end
 end
 
-function Optimization.Disable()
+function Performance.Disable()
     if not Enabled then
         return
     end
 
     Enabled = false
 
-    for Name, OriginalValue in pairs(OriginalValues) do
+    for Name, Value in pairs(OriginalValues) do
         pcall(function()
-            setfflag(Name, OriginalValue)
+            setfflag(Name, Value)
         end)
     end
 
     table.clear(OriginalValues)
 end
 
-function Optimization.Toggle()
+function Performance.Toggle()
     if Enabled then
-        Optimization.Disable()
+        Performance.Disable()
     else
-        Optimization.Enable()
+        Performance.Enable()
     end
 end
 
-function Optimization.IsEnabled()
+function Performance.IsEnabled()
     return Enabled
 end
 
-return Optimization
+function Performance.GetAvailableFlags()
+    local Available = {}
+
+    for Name in pairs(Flags) do
+        if GetFlag(Name) ~= nil then
+            Available[Name] = true
+        end
+    end
+
+    return Available
+end
+
+return Performance
