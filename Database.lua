@@ -20,7 +20,7 @@ local NPCs = {
 
     --// Pirate Island
         ["Clown Swordman [Lv. 50]"] = {
-            Location = CFrame.new(-1890, 49, -4440),
+            Location = CFrame.new(-509, 65, -3498),
             Folder_Path = "Mon"
         },
         ["The Clown [Lv. 75]"] = {
