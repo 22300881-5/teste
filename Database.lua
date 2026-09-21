@@ -241,11 +241,11 @@ local NPCs = {
 local Materials = {
     ["Sea 1"] = {
         ["Fresh Fish"] = {
-            NPCs["Sea 1"]["Fighter Fishman [Lv. 180]"],
+            ["Fighter Fishman [Lv. 180]"] = NPCs["Sea 1"]["Fighter Fishman [Lv. 180]"],
         },
         ["Rusted Scrap"] = {
-            NPCs["Sea 1"]["Clown Swordman [Lv. 50]"],
-            NPCs["Sea 1"]["Snow Soldier [Lv. 400]"],
+            ["Clown Swordman [Lv. 50]"] = NPCs["Sea 1"]["Clown Swordman [Lv. 50]"],
+            ["Snow Soldier [Lv. 400]"] = NPCs["Sea 1"]["Snow Soldier [Lv. 400]"],
         },
         --[[ 
         
