@@ -1,6 +1,7 @@
 local InstanceUtils = {}
 
 function InstanceUtils.GetPrimaryPart(instance)
+	-- instance: Model
 	if not instance then
 		return nil
 	end
@@ -13,6 +14,7 @@ function InstanceUtils.GetPrimaryPart(instance)
 end
 
 function InstanceUtils.FindBasePart(instance)
+	-- instance: Instance
 	if not instance then
 		return nil
 	end
@@ -21,6 +23,7 @@ function InstanceUtils.FindBasePart(instance)
 end
 
 function InstanceUtils.GetCFrame(instance)
+	-- instance: Model | BasePart
 	if not instance then
 		return nil
 	end
@@ -37,11 +40,8 @@ function InstanceUtils.GetCFrame(instance)
 end
 
 function InstanceUtils.GetModelCFrame(model)
-	if not model then
-		return nil
-	end
-
-	if not model:IsA("Model") then
+	-- model: Model
+	if not model or not model:IsA("Model") then
 		return nil
 	end
 
@@ -49,12 +49,14 @@ function InstanceUtils.GetModelCFrame(model)
 end
 
 function InstanceUtils.GetPosition(instance)
+	-- instance: Model | BasePart
 	local cframe = InstanceUtils.GetCFrame(instance)
 
 	return cframe and cframe.Position or nil
 end
 
 function InstanceUtils.GetSize(instance)
+	-- instance: Model | BasePart
 	if not instance then
 		return nil
 	end
@@ -72,6 +74,7 @@ function InstanceUtils.GetSize(instance)
 end
 
 function InstanceUtils.GetBoundingBox(instance)
+	-- instance: Model | BasePart
 	if not instance then
 		return nil, nil
 	end
@@ -88,6 +91,7 @@ function InstanceUtils.GetBoundingBox(instance)
 end
 
 function InstanceUtils.GetModelParts(model)
+	-- model: Model
 	if not model then
 		return {}
 	end
@@ -103,15 +107,9 @@ function InstanceUtils.GetModelParts(model)
 	return parts
 end
 
-function InstanceUtils.FindHumanoid(instance)
-	if not instance then
-		return nil
-	end
-
-	return instance:FindFirstChildWhichIsA("Humanoid", true)
-end
-
 function InstanceUtils.FindChild(instance, name)
+	-- instance: Instance
+	-- name: string
 	if not instance or not name then
 		return nil
 	end
@@ -120,6 +118,8 @@ function InstanceUtils.FindChild(instance, name)
 end
 
 function InstanceUtils.FindDescendant(instance, name)
+	-- instance: Instance
+	-- name: string
 	if not instance or not name then
 		return nil
 	end
@@ -128,6 +128,8 @@ function InstanceUtils.FindDescendant(instance, name)
 end
 
 function InstanceUtils.HasChild(instance, name)
+	-- instance: Instance
+	-- name: string
 	if not instance or not name then
 		return false
 	end
@@ -136,6 +138,8 @@ function InstanceUtils.HasChild(instance, name)
 end
 
 function InstanceUtils.GetChildrenOfClass(instance, className)
+	-- instance: Instance
+	-- className: string
 	if not instance or not className then
 		return {}
 	end
@@ -152,6 +156,8 @@ function InstanceUtils.GetChildrenOfClass(instance, className)
 end
 
 function InstanceUtils.GetDescendantsOfClass(instance, className)
+	-- instance: Instance
+	-- className: string
 	if not instance or not className then
 		return {}
 	end
@@ -168,34 +174,43 @@ function InstanceUtils.GetDescendantsOfClass(instance, className)
 end
 
 function InstanceUtils.IsModel(instance)
+	-- instance: Instance
 	return instance ~= nil and instance:IsA("Model")
 end
 
 function InstanceUtils.IsBasePart(instance)
+	-- instance: Instance
 	return instance ~= nil and instance:IsA("BasePart")
 end
 
 function InstanceUtils.IsTool(instance)
+	-- instance: Instance
 	return instance ~= nil and instance:IsA("Tool")
 end
 
 function InstanceUtils.HasPrimaryPart(instance)
+	-- instance: Model
 	return instance ~= nil
 		and instance:IsA("Model")
 		and instance.PrimaryPart ~= nil
 end
 
 function InstanceUtils.IsDescendantOf(instance, ancestor)
+	-- instance: Instance
+	-- ancestor: Instance
 	return instance ~= nil
 		and ancestor ~= nil
 		and instance:IsDescendantOf(ancestor)
 end
 
 function InstanceUtils.Exists(instance)
+	-- instance: Instance
 	return instance ~= nil and instance.Parent ~= nil
 end
 
 function InstanceUtils.GetTool(container, toolName)
+	-- container: Instance
+	-- toolName: string
 	if not container or not toolName then
 		return nil
 	end
@@ -210,6 +225,8 @@ function InstanceUtils.GetTool(container, toolName)
 end
 
 function InstanceUtils.FindTool(container, toolName)
+	-- container: Instance
+	-- toolName: string
 	if not container or not toolName then
 		return nil
 	end
@@ -224,6 +241,9 @@ function InstanceUtils.FindTool(container, toolName)
 end
 
 function InstanceUtils.GetAttribute(instance, attribute, default)
+	-- instance: Instance
+	-- attribute: string
+	-- default: any
 	if not instance or not attribute then
 		return default
 	end
@@ -238,6 +258,9 @@ function InstanceUtils.GetAttribute(instance, attribute, default)
 end
 
 function InstanceUtils.SetAttribute(instance, attribute, value)
+	-- instance: Instance
+	-- attribute: string
+	-- value: any
 	if not instance or not attribute then
 		return false
 	end
@@ -248,6 +271,7 @@ function InstanceUtils.SetAttribute(instance, attribute, value)
 end
 
 function InstanceUtils.SafeDestroy(instance)
+	-- instance: Instance
 	if not instance or not instance.Parent then
 		return false
 	end
