@@ -279,7 +279,65 @@ local Materials = {
     },
 }
 
+local Quests = {
+    ["Sea 1"] = {
+        {lvl = 1, Name = "Kill 4 Soldiers", NPC = "Soldier [Lv. 1]"},
+        {lvl = 10, Name = "Kill 5 Clown Pirates", NPC = "Clown Pirate [Lv. 10]"},
+        {lvl = 20, Name = "Kill 1 Smoky", NPC = "Smoky [Lv. 20]"},
+        {lvl = 50, Name = "Kill 1 Tashi", NPC = "Tashi [Lv. 30]"},
+
+        {lvl = 75, Name = "Kill 1 The Clown", NPC = "The Clown [Lv. 75]"},
+
+        {lvl = 120, Name = "Kill 1 Captain", NPC = "Captain [Lv. 120]"},
+        {lvl = 145, Name = "Kill 1 The Barbaric", NPC = "The Barbaric [Lv. 145]"},
+
+        {lvl = 230, Name = "Kill 1 Shark Man", NPC = "Shark Man [Lv. 230]"},
+
+        {lvl = 250, Name = "Kill 4 Trainer Chef", NPC = "Trainer Chef [Lv. 250]"},
+        {lvl = 300, Name = "Kill 1 Dark Leg", NPC = "Dark Leg [Lv. 300]"},
+        {lvl = 350, Name = "Kill 1 Dory", NPC = "Dory [Lv. 350]"},
+
+        {lvl = 450, Name = "Kill 1 King Snow", NPC = "King Snow [Lv. 450]"},
+        {lvl = 500, Name = "Kill 1 Little Dear", NPC = "Little Dear [Lv. 500]"},
+
+        {lvl = 550, Name = "Kill 1 Candle Man", NPC = "Candle Man [Lv. 525]"},
+        {lvl = 625, Name = "Kill 1 Bomb Man", NPC = "Bomb Man [Lv. 625]"},
+        {lvl = 725, Name = "Kill 1 King of Sand", NPC = "King of Sand [Lv. 725]"},
+
+        {lvl = 800, Name = "Kill 1 Ball Man", NPC = "Ball Man [Lv. 850]"},
+        {lvl = 950, Name = "Kill 1 Rumble Man", NPC = "Rumble Man [Lv. 950]"},
+
+        {lvl = 1100, Name = "Kill 1 Leader", NPC = "Leader [Lv. 1100]"},
+        {lvl = 1150, Name = "Kill 1 Pasta", NPC = "Pasta [Lv. 1150]"},
+
+        {lvl = 1200, Name = "Kill 4 Naval personnel", NPC = "Naval personnel [Lv. 1200]"},
+        {lvl = 1250, Name = "Kill 1 Wolf", NPC = "Wolf [Lv. 1250]"},
+        {lvl = 1300, Name = "Kill 1 Giraffe", NPC = "Giraffe [Lv. 1300]"},
+        {lvl = 1350, Name = "Kill 4 Nautical soldier", NPC = "Nautical soldier [Lv. 1350]"},
+        {lvl = 1400, Name = "Kill 4 Naval soldier", NPC = "Naval soldier [Lv. 1400]"},
+        {lvl = 1450, Name = "Kill 1 Leo", NPC = "Leo [Lv. 1450]"},
+
+        {lvl = 1500, Name = "Kill 5 Zombies", NPC = "Zombie [Lv. 1500]"},
+        {lvl = 1550, Name = "Kill 4 Elite Zombies", NPC = "Elite Zombie [Lv. 1550]"},
+        {lvl = 1600, Name = "Kill 4 Revenant", NPC = "Revenant [Lv. 1600]"},
+        {lvl = 1650, Name = "Kill 1 Shadow Master", NPC = "Shadow Master [Lv. 1650]"},
+
+        {lvl = 1700, Name = "Kill 4 New World Pirates", NPC = "New World Pirate [Lv. 1700]"},
+        {lvl = 1750, Name = "Kill 4 Cutlass Pirates", NPC = "Cutlass Pirate [Lv. 1750]"},
+        {lvl = 1800, Name = "Kill 4 Rear Admirals", NPC = "Rear Admiral [Lv. 1800]"},
+        {lvl = 1850, Name = "Kill 1 True Karate Fishman", NPC = "True Karate Fishman [Lv. 1850]"},
+        {lvl = 1925, Name = "Kill 1 Quake Woman", NPC = "Quake Woman [Lv. 1925]"},
+
+        {lvl = 2000, Name = "Kill 4 Fishmans", NPC = "Fishman [Lv. 2000]"},
+        {lvl = 2050, Name = "Kill 1 Combat Fishman", NPC = "Combat Fishman [Lv. 2050]"},
+        {lvl = 2100, Name = "Kill 1 Sword Fishman", NPC = "Sword Fishman [Lv. 2100]"},
+        {lvl = 2150, Name = "Kill 1 Soldier Fishman", NPC = "Soldier Fishman [Lv. 2150]"},
+        {lvl = 2200, Name = "Kill 1 Seasoned Fishman", NPC = "Seasoned Fishman [Lv. 2200]"},
+    }
+}
+
 return {
     NPCs = NPCs,
-    Materials = Materials
+    Materials = Materials,
+    Quests = Quests,
 }
