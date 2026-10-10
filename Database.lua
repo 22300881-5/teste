@@ -231,214 +231,217 @@ local NPCs = {
         },
     },
     ["Sea 2"] = {
-        ["Soldier"] = {
-            Location = CFrame.new(-4311,57,40),
-            Folder_Path = "Mon"
-        },
-        ["Clown Pirate"] = {
-            Location = CFrame.new(-4311,57,40),
-            Folder_Path = "Mon"
-        },
-        ["Gazelle Man"] = {
-            Location = CFrame.new(-4311,57,40),
-            Folder_Path = "Boss"
-        },
-
-        ["Bandit Beast Pirate"] = {
+        ["Beast Pirate [Lv. 2250]"] = {
             Location = CFrame.new(-4714,137,-958),
             Folder_Path = "Mon"
         },
-        ["Powerful Beast Pirate"] = {
+        ["Beast Swordman [Lv. 2300]"] = {
             Location = CFrame.new(-4714,137,-958),
             Folder_Path = "Mon"
         },
-        ["Violet Samurai"] = {
+        ["Gazelle Man [Lv. 2350]"] = {
+            Location = CFrame.new(-4311,57,40),
+            Folder_Path = "Boss"
+        },
+        ["Bandit Beast Pirate [Lv. 2400]"] = {
+            Location = CFrame.new(-4714,137,-958),
+            Folder_Path = "Mon"
+        },
+        ["Powerful Beast Pirate [Lv. 2450]"] = {
+            Location = CFrame.new(-4714,137,-958),
+            Folder_Path = "Mon"
+        },
+
+
+        ["Violet Samurai [Lv. 2500]"] = {
             Location = CFrame.new(-4714,137,-958),
             Folder_Path = "Boss"
         },
 
-        ["Duke"] = {
+        ["Duke [Lv. 2550]"] = {
             Location = CFrame.new(-5248, 99, -76),
             Folder_Path = "Boss"
         },
-        ["Magician"] = {
+        ["Magician [Lv. 2600]"] = {
             Location = CFrame.new(-5248, 99, -76),
             Folder_Path = "Boss"
         },
-        ["Kitsune Samurai"] = {
+        ["Kitsune Samurai [Lv. 2650]"] = {
             Location = CFrame.new(-5248, 99, -76),
             Folder_Path = "Boss"
         },
 
-        ["Elite Beast Pirate"] = {
+
+        ["Elite Beast Pirate [Lv. 2700]"] = {
             Location = CFrame.new(-4301,29,1075),
             Folder_Path = "Mon"
         }, 
-        ["Bear Man"] = {
+        ["Bear Man [Lv. 2750]"] = {
             Location = CFrame.new(-4301,29,1075),
             Folder_Path = "Boss"
         }, 
-        ["Bean"] = {
+        ["Bean [Lv. 2800]"] = {
             Location = CFrame.new(-4301,29,1075),
             Folder_Path = "Boss"
         }, 
 
-        ["Meji"] = {
+
+        ["Meji [Lv. 2850]"] = {
             Location = CFrame.new(-5559, 57, 1095),
             Folder_Path = "Boss"
         }, 
-        ["Petra"] = {
+        ["Petra [Lv. 2900]"] = {
             Location = CFrame.new(-5559, 57, 1095),
             Folder_Path = "Boss"
         },
 
-        ["Kappa"] = {
+
+        ["Kappa [Lv. 2950]"] = {
             Location = CFrame.new(-5029, 57, 2044),
             Folder_Path = "Boss"
         }, 
-        ["Joey"] = {
+        ["Joey [Lv. 3000]"] = {
             Location = CFrame.new(-5029, 57, 2044),
             Folder_Path = "Boss"
         },
 
         --//////////////
 
-        ["Skull Pirate"] = {
+        ["Skull Pirate [Lv. 3050]"] = {
             Location = CFrame.new(-6122, 118, 7081),
             Folder_Path = "Mon"
         },
-        ["Elite Skeleton"] = {
+        ["Elite Skeleton [Lv. 3100]"] = {
             Location = CFrame.new(-6122, 118, 7081),
             Folder_Path = "Boss"
         },
 
         --//////////////
 
-        ["Desert Thief"] = {
+        ["Desert Thief [Lv. 3125]"] = {
             Location = CFrame.new(1401, 14, 1256),
             Folder_Path = "Boss"
         },
-        ["Anubis"] = {
+        ["Anubis [Lv. 3150]"] = {
             Location = CFrame.new(1782, 14, 1184),
             Folder_Path = "Boss"
         },
-        ["Pharaoh"] = {
+        ["Pharaoh [Lv. 3175]"] = {
             Location = CFrame.new(2073, 43, 1620),
             Folder_Path = "Boss"
         },
-        ["Flame User"] = {
+        ["Flame User [Lv. 3200]"] = {
             Location = CFrame.new(1782, 14, 1184),
             Folder_Path = "Boss"
         },
 
         --//////////////
 
-        ["Chess Soldier"] = {
+        ["Chess Soldier [Lv. 3200]"] = {
             Location = CFrame.new(-207, 28, 8250),
             Folder_Path = "Mon"
         },
-        ["Sunken Vessel"] = {
+        ["Sunken Vessel [Lv. 3225]"] = {
             Location = CFrame.new(-911,28,8282),
             Folder_Path = "Boss"
         },
-        ["Biscuit Man"] = {
+        ["Biscuit Man [Lv. 3250]"] = {
             Location = CFrame.new(-1351, 202, 8814),
             Folder_Path = "Boss"
         },
 
-        ["Dough Master"] = {
+        ["Dough Master [Lv. 3275]"] = {
             Location = CFrame.new(30293, 24, 93270),
             Folder_Path = "Boss"
         },
 
         --//////////////
 
-        ["Azlan"] = {
+        ["Azlan [Lv. 3300]"] = {
             Location = CFrame.new(-701, 56, -2638),
             Folder_Path = "Mon"
         },
-        ["The Volcano"] = {
+        ["The Volcano [Lv. 3325]"] = {
             Location = CFrame.new(-29, 130, -3829),
             Folder_Path = "Mon"
         },
 
         --//////////////
 
-        ["Dark Beard Servant"] = {
+        ["Dark Beard Servant [Lv. 3400]"] = {
             Location = CFrame.new(-9568, 57, -4882),
             Folder_Path = "Mon"
         },
-        ["Supreme Swordman"] = {
+        ["Supreme Swordman [Lv. 3425]"] = {
             Location = CFrame.new(-9568, 57, -4882),
             Folder_Path = "Boss"
         },
-        ["Sally"] = {
+        ["Sally [Lv. 3450]"] = {
             Location = CFrame.new(-9568, 57, -4882),
             Folder_Path = "Boss"
         },
 
         --//////////////
 
-        ["Vice Admiral"] = {
+        ["Vice Admiral [Lv. 3500]"] = {
             Location = CFrame.new(-10192, 86, 573),
             Folder_Path = "Mon"
         },
-        ["Pondere"] = {
+        ["Pondere [Lv. 3525]"] = {
             Location = CFrame.new(-9993, 37, 1255),
             Folder_Path = "Boss"
         },
-
-        ["Hefty"] = {
+        ["Hefty [Lv. 3550]"] = {
             Location = CFrame.new(-10594, 83, 1097),
             Folder_Path = "Boss"
         },
 
         --//////////////
 
-        ["Fiore Gladiator"] = {
+        ["Fiore Gladiator [Lv. 3600]"] = {
             Location = CFrame.new(5381, 71, -2679),
             Folder_Path = "Mon"
         },
-        ["Fiore Fighter"] = {
+        ["Fiore Fighter [Lv. 3625]"] = {
             Location = CFrame.new(5381, 71, -2679),
             Folder_Path = "Mon"
         },
 
-        ["Fiore Pirate"] = {
+        ["Fiore Pirate [Lv. 3650]"] = {
             Location = CFrame.new(6084, 112, -2843),
             Folder_Path = "Mon"
         },
-        ["Lomeo"] = {
+        ["Lomeo [Lv. 3675]"] = {
             Location = CFrame.new(6588, 71, -2349),
             Folder_Path = "Boss"
         },
 
-        ["Prince Aria"] = {
+        ["Prince Aria [Lv. 3700]"] = {
             Location = CFrame.new(6866, 149, -3573),
             Folder_Path = "Boss"
         },
-        ["Devastate"] = {
+        ["Devastate [Lv. 3725]"] = {
             Location = CFrame.new(7694, 282, -2483),
             Folder_Path = "Boss"
         },
-        ["Physicus"] = {
+        ["Physicus [Lv. 3750]"] = {
             Location = CFrame.new(7996, 178, -4139),
             Folder_Path = "Boss"
         },
-        ["Floffy"] = {
+        ["Floffy [Lv. 3775]"] = {
             Location = CFrame.new(7694, 282, -2483),
             Folder_Path = "Boss"
         },
 
-        ["Dead Troupe"] = {
+        ["Dead Troupe [Lv. 3800]"] = {
             Location = CFrame.new(9982, 71, -4311),
             Folder_Path = "Mon"
         },
-        ["Dead Troupe Captain"] = {
+        ["Dead Troupe Captain [Lv. 3850]"] = {
             Location = CFrame.new(9982, 71, -4311),
             Folder_Path = "Mon"
         },
-        ["Ryu"] = {
+        ["Ryu [Lv. 3975]"] = {
             Location = CFrame.new(9982, 71, -4311),
             Folder_Path = "Boss"
         },
@@ -578,87 +581,87 @@ local Quests = {
         {lvl = 2200, Name = "Kill 1 Seasoned Fishman", NPC = "Seasoned Fishman [Lv. 2200]"},
     },
     ["Sea 2"] = {
-        {lvl = 2250, Name = "Kill 4 Beast Pirates", NPC = "Beast Pirate"},
-        {lvl = 2300, Name = "Kill 4 Beast Swordman", NPC = "Beast Swordman"},
-        {lvl = 2350, Name = "Kill 1 Gazelle Man", NPC = "Gazelle Man"},
+        {lvl = 2250, Name = "Kill 4 Beast Pirates", NPC = "Beast Pirate [Lv. 2250]"},
+        {lvl = 2300, Name = "Kill 4 Beast Swordman", NPC = "Beast Swordman [Lv. 2300]"},
+        {lvl = 2350, Name = "Kill 1 Gazelle Man", NPC = "Gazelle Man [Lv. 2350]"},
 
-        {lvl = 2400, Name = "Kill 4 Bandit Beast Pirates", NPC = "Bandit Beast Pirate"},
-        {lvl = 2450, Name = "Kill 4 Powerful Beast Pirates", NPC = "Powerful Beast Pirate"},
-        {lvl = 2500, Name = "Kill 1 Violet Samurai", NPC = "Violet Samurai"},
+        {lvl = 2400, Name = "Kill 4 Bandit Beast Pirates", NPC = "Bandit Beast Pirate [Lv. 2400]"},
+        {lvl = 2450, Name = "Kill 4 Powerful Beast Pirates", NPC = "Powerful Beast Pirate [Lv. 2450]"},
+        {lvl = 2500, Name = "Kill 1 Violet Samurai", NPC = "Violet Samurai [Lv. 2500]"},
 
-        {lvl = 2550, Name = "Kill 1 Duke", NPC = "Duke"},
-        {lvl = 2600, Name = "Kill 1 Magician", NPC = "Magician"},
-        {lvl = 2650, Name = "Kill 1 Kitsune Samurai", NPC = "Kitsune Samurai"},
+        {lvl = 2550, Name = "Kill 1 Duke", NPC = "Duke [Lv. 2550]"},
+        {lvl = 2600, Name = "Kill 1 Magician", NPC = "Magician [Lv. 2600]"},
+        {lvl = 2650, Name = "Kill 1 Kitsune Samurai", NPC = "Kitsune Samurai [Lv. 2650]"},
         
-        {lvl = 2700, Name = "Kill 4 Elite Beast Pirates", NPC = "Elite Beast Pirate"},
-        {lvl = 2750, Name = "Kill 1 Bear Man", NPC = "Bear Man"},
-        {lvl = 2800, Name = "Kill 1 Bean", NPC = "Bean"},
+        {lvl = 2700, Name = "Kill 4 Elite Beast Pirates", NPC = "Elite Beast Pirate [Lv. 2700]"},
+        {lvl = 2750, Name = "Kill 1 Bear Man", NPC = "Bear Man [Lv. 2750]"},
+        {lvl = 2800, Name = "Kill 1 Bean", NPC = "Bean [Lv. 2800]"},
 
-        {lvl = 2850, Name = "Kill 1 Meji", NPC = "Meji"},
-        {lvl = 2900, Name = "Kill 1 Petra", NPC = "Petra"},
+        {lvl = 2850, Name = "Kill 1 Meji", NPC = "Meji [Lv. 2850]"},
+        {lvl = 2900, Name = "Kill 1 Petra", NPC = "Petra [Lv. 2900]"},
 
-        {lvl = 2950, Name = "Kill 1 Kappa", NPC = "Kappa"},
-        {lvl = 3000, Name = "Kill 1 Joey", NPC = "Joey"},
-
-        --//////////////
-
-        {lvl = 3025, Name = "Kill 4 Skull Pirates", NPC = "Skull Pirate"},
-        {lvl = 3075, Name = "Kill 1 Elite Skeleton", NPC = "Elite Skeleton"},
+        {lvl = 2950, Name = "Kill 1 Kappa", NPC = "Kappa [Lv. 2950]"},
+        {lvl = 3000, Name = "Kill 1 Joey", NPC = "Joey [Lv. 3000]"},
 
         --//////////////
 
-        {lvl = 3100, Name = "Kill 1 Desert Thief", NPC = "Desert Thief"},
-        {lvl = 3125, Name = "Kill 1 Anubis", NPC = "Anubis"},
-        {lvl = 3150, Name = "Kill 1 Pharaoh", NPC = "Pharaoh"},
-        {lvl = 3175, Name = "Kill 1 Flame User", NPC = "Flame User"},
+        {lvl = 3025, Name = "Kill 4 Skull Pirates", NPC = "Skull Pirate [Lv. 3050]"},
+        {lvl = 3075, Name = "Kill 1 Elite Skeleton", NPC = "Elite Skeleton [Lv. 3100]"},
+
+        --//////////////
+
+        {lvl = 3100, Name = "Kill 1 Desert Thief", NPC = "Desert Thief [Lv. 3125]"},
+        {lvl = 3125, Name = "Kill 1 Anubis", NPC = "Anubis [Lv. 3150]"},
+        {lvl = 3150, Name = "Kill 1 Pharaoh", NPC = "Pharaoh [Lv. 3175]"},
+        {lvl = 3175, Name = "Kill 1 Flame User", NPC = "Flame User [Lv. 3200]"},
             
         --//////////////
 
-        {lvl = 3200, Name = "Kill 4 Chess Soldiers", NPC = "Chess Soldier"},
-        {lvl = 3225, Name = "Kill 1 Sunken Vessel", NPC = "Sunken Vessel"},
-        {lvl = 3250, Name = "Kill 1 Biscuit Man", NPC = "Biscuit Man"},
+        {lvl = 3200, Name = "Kill 4 Chess Soldiers", NPC = "Chess Soldier [Lv. 3200]"},
+        {lvl = 3225, Name = "Kill 1 Sunken Vessel", NPC = "Sunken Vessel [Lv. 3225]"},
+        {lvl = 3250, Name = "Kill 1 Biscuit Man", NPC = "Biscuit Man [Lv. 3250]"},
 
-        {lvl = 3275, Name = "Kill 1 Dough Master", NPC = "Dough Master"},
+        {lvl = 3275, Name = "Kill 1 Dough Master", NPC = "Dough Master [Lv. 3275]"},
 
         --//////////////
 
-        {lvl = 3300, Name = "Kill 4 Azlan", NPC = "Azlan"},
-        {lvl = 3325, Name = "Kill 4 The Volcano", NPC = "The Volcano"},
+        {lvl = 3300, Name = "Kill 4 Azlan", NPC = "Azlan [Lv. 3300]"},
+        {lvl = 3325, Name = "Kill 4 The Volcano", NPC = "The Volcano [Lv. 3325]"},
     -- {lvl = 3275, Name = "Kill 1 The Ice Master", NPC = "Dough Master"}, ** precisa de item pra spwanar, jogo imbecil
         --{lvl = 3275, Name = "Kill 1 The Lava Master", NPC = "Dough Master"},
 
         --//////////////
 
-        {lvl = 3400, Name = "Kill 4 Dark Beard Servant", NPC = "Dark Beard Servant"},
-        {lvl = 3425, Name = "Kill 1 Supreme Swordman", NPC = "Supreme Swordman"},
-        {lvl = 3450, Name = "Kill 1 Sally", NPC = "Sally"},
+        {lvl = 3400, Name = "Kill 4 Dark Beard Servant", NPC = "Dark Beard Servant [Lv. 3400]"},
+        {lvl = 3425, Name = "Kill 1 Supreme Swordman", NPC = "Supreme Swordman [Lv. 3425]"},
+        {lvl = 3450, Name = "Kill 1 Sally", NPC = "Sally [Lv. 3450]"},
         --{lvl = 3450, Name = "Kill 1 Dark Beard", NPC = "Dark Beard"},** precisa de item pra spwanar, jogo imbecil
 
         --//////////////
 
-        {lvl = 3500, Name = "Kill 5 Vice Admiral", NPC = "Vice Admiral"},
-        {lvl = 3525, Name = "Kill 1 Pondere", NPC = "Pondere"},
+        {lvl = 3500, Name = "Kill 5 Vice Admiral", NPC = "Vice Admiral [Lv. 3500]"},
+        {lvl = 3525, Name = "Kill 1 Pondere", NPC = "Pondere [Lv. 3525]"},
 
-        {lvl = 3550, Name = "Kill 1 Hefty", NPC = "Hefty"},
+        {lvl = 3550, Name = "Kill 1 Hefty", NPC = "Hefty [Lv. 3550]"},
         --{lvl = 3575, Name = "Kill 1 Lucidus", NPC = "Lucidus"},** precisa de item pra spwanar, jogo imbecil
 
 
-        {lvl = 3600, Name = "Kill 6 Fiore Gladiator", NPC = "Fiore Gladiator"},
-        {lvl = 3625, Name = "Kill 6 Fiore Fighter", NPC = "Fiore Fighter"},
+        {lvl = 3600, Name = "Kill 6 Fiore Gladiator", NPC = "Fiore Gladiator [Lv. 3600]"},
+        {lvl = 3625, Name = "Kill 6 Fiore Fighter", NPC = "Fiore Fighter [Lv. 3625]"},
 
-        {lvl = 3650, Name = "Kill 7 Fiore Pirate", NPC = "Fiore Pirate"},
-        {lvl = 3675, Name = "Kill 1 Lomeo", NPC = "Lomeo"},
+        {lvl = 3650, Name = "Kill 7 Fiore Pirate", NPC = "Fiore Pirate [Lv. 3650]"},
+        {lvl = 3675, Name = "Kill 1 Lomeo", NPC = "Lomeo [Lv. 3675]"},
 
-        {lvl = 3700, Name = "Kill 1 Prince Aria", NPC = "Prince Aria"},
-        {lvl = 3725, Name = "Kill 1 Devastate", NPC = "Devastate"},
-        {lvl = 3750, Name = "Kill 1 Physicus", NPC = "Physicus"},
-        {lvl = 3775, Name = "Kill 1 Floffy", NPC = "Floffy"},
+        {lvl = 3700, Name = "Kill 1 Prince Aria", NPC = "Prince Aria [Lv. 3700]"},
+        {lvl = 3725, Name = "Kill 1 Devastate", NPC = "Devastate [Lv. 3725]"},
+        {lvl = 3750, Name = "Kill 1 Physicus", NPC = "Physicus [Lv. 3750]"},
+        {lvl = 3775, Name = "Kill 1 Floffy", NPC = "Floffy [Lv. 3775]"},
 
-        {lvl = 3800, Name = "Kill 4 Dead Troupe", NPC = "Dead Troupe"},
-        {lvl = 3850, Name = "Kill 4 Dead Troupe Captain", NPC = "Dead Troupe Captain"},
-        {lvl = 3950, Name = "Kill 1 Ryu", NPC = "Ryu"},
+        {lvl = 3800, Name = "Kill 4 Dead Troupe", NPC = "Dead Troupe [Lv. 3800]"},
+        {lvl = 3850, Name = "Kill 4 Dead Troupe Captain", NPC = "Dead Troupe Captain [Lv. 3850]"},
+        {lvl = 3950, Name = "Kill 1 Ryu", NPC = "Ryu [Lv. 3975]"},
     },
-    
+
 }
 
 return {
