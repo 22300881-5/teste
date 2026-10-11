@@ -232,11 +232,11 @@ local NPCs = {
     },
     ["Sea 2"] = {
         ["Beast Pirate [Lv. 2250]"] = {
-            Location = CFrame.new(-4714,137,-958),
+            Location = CFrame.new(-4201, 98, -197),
             Folder_Path = "Mon"
         },
         ["Beast Swordman [Lv. 2300]"] = {
-            Location = CFrame.new(-4714,137,-958),
+            Location = CFrame.new(-4201, 98, -197),
             Folder_Path = "Mon"
         },
         ["Gazelle Man [Lv. 2350]"] = {
