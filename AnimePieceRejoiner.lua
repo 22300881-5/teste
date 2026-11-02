@@ -2104,9 +2104,9 @@ Runtime.ControllerThread=task.spawn(function()
 end)
 
 
--- Remove o "Anti Enemy Weld" de forma contínua: ele volta a cada respawn, pode usar outros sinais
--- e alguns executores não preenchem conexao.Script. Por isso: desativa o próprio script, varre
--- vários sinais, identifica a origem por mais de um caminho e repete a varredura enquanto o Main roda.
+-- Remove o "Anti Enemy Weld" com Disconnect, de forma contínua: ele volta a cada respawn, pode usar
+-- outros sinais e alguns executores não preenchem conexao.Script. Por isso varre vários sinais,
+-- identifica a origem por mais de um caminho e repete a varredura enquanto o Main roda.
 local ANTI_WELD_NAME = "Anti Enemy Weld"
 local function origemDaConexao(conexao)
     local ok, origem = pcall(function() return conexao.Script end)
@@ -2124,14 +2124,6 @@ end
 local function ehAntiWeld(origem)
     if typeof(origem) == "Instance" then return origem.Name == ANTI_WELD_NAME end
     return type(origem) == "string" and origem:find(ANTI_WELD_NAME, 1, true) ~= nil
-end
-local function desativarScript(obj)
-    if obj.Name == ANTI_WELD_NAME and (obj:IsA("LocalScript") or obj:IsA("Script")) then
-        -- Desativar o script encerra as threads e conexões dele.
-        pcall(function() obj.Disabled = true end)
-        pcall(function() obj.Enabled = false end)
-        return true
-    end
 end
 local function varrerConexoesAntiWeld()
     if type(getconnections) ~= "function" then return 0 end
@@ -2152,21 +2144,13 @@ local function varrerConexoesAntiWeld()
 end
 local function RemoveConnection()
     if Runtime.AntiWeldWatcher then return end
-    local function varrerInstancias(root)
-        for _, obj in ipairs(root:GetDescendants()) do desativarScript(obj) end
-    end
-    -- Scripts já existentes no jogador e no personagem.
-    pcall(varrerInstancias, player)
-    if player.Character then pcall(varrerInstancias, player.Character) end
-    -- Scripts que aparecerem depois (respawn, recarregamento do PlayerScripts).
-    table.insert(Runtime.RejoinConnections, player.DescendantAdded:Connect(desativarScript))
-    table.insert(Runtime.RejoinConnections, workspace.DescendantAdded:Connect(function(obj)
-        if obj.Name == ANTI_WELD_NAME then desativarScript(obj) end
+    -- Após um respawn o script reconecta; varre logo em seguida, sem esperar o próximo ciclo.
+    table.insert(Runtime.RejoinConnections, player.CharacterAdded:Connect(function()
+        for _, atraso in ipairs({0.5, 1.5, 3}) do
+            task.delay(atraso, function() if Runtime.Alive then pcall(varrerConexoesAntiWeld) end end)
+        end
     end))
-    table.insert(Runtime.RejoinConnections, player.CharacterAdded:Connect(function(character)
-        task.defer(function() pcall(varrerInstancias, character) end)
-    end))
-    -- Varredura periódica das conexões: cobre a conexão criada antes do script ser desativado.
+    -- Varredura periódica: a conexão é desfeita com Disconnect sempre que reaparecer.
     Runtime.AntiWeldWatcher = task.spawn(function()
         local total = 0
         while Runtime.Alive do
