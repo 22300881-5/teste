@@ -139,7 +139,8 @@ local Report={Enabled=true,Interval=30,Folder="AnimePiece",
     File="AnimePiece/Relatorio_"..game.PlaceId.."_"..player.UserId..".json"}
 local function reportNew()
     -- LastServer evita recontar o servidor atual logo após zerar o período.
-    return {Start=os.time(),Servers=0,Collected={},Ignored={},LastServer=game.JobId}
+    -- ServerIds: entradas por JobId, para separar servidores diferentes de repetidos.
+    return {Start=os.time(),Servers=0,ServerIds={},Collected={},Ignored={},LastServer=game.JobId}
 end
 local function reportLoad()
     local data
@@ -154,7 +155,17 @@ local function reportLoad()
     data.Servers=tonumber(data.Servers) or 0
     if type(data.Collected)~="table" then data.Collected={} end
     if type(data.Ignored)~="table" then data.Ignored={} end
+    if type(data.ServerIds)~="table" then data.ServerIds={} end
     return data
+end
+-- Retorna: servidores diferentes e entradas repetidas no período.
+local function reportServidores(s)
+    local diferentes,repetidas=0,0
+    for _,vezes in pairs(s.ServerIds or {}) do
+        diferentes+=1
+        repetidas+=math.max(0,vezes-1)
+    end
+    return diferentes,repetidas
 end
 function Report.Save()
     if type(writefile)~="function" then return end
@@ -182,11 +193,13 @@ local function reportLinhas(lista)
 end
 Report.Linhas=reportLinhas
 Report.Soma=reportSoma
+Report.Servidores=reportServidores
 function Report.Texto()
     local s=Report.State
     local minutos=math.floor((os.time()-s.Start)/60)
-    return string.format("<b>⏱ Período atual:</b> %d / %d min\n<b>🌐 Servidores:</b> %d\n<b>🍈 Coletadas (%d):</b>\n%s\n<b>🚫 Ignoradas (%d):</b>\n%s",
-        minutos,Report.Interval,s.Servers,reportSoma(s.Collected),reportLinhas(s.Collected),reportSoma(s.Ignored),reportLinhas(s.Ignored))
+    local diferentes,repetidas=reportServidores(s)
+    return string.format("<b>⏱ Período atual:</b> %d / %d min\n<b>🌐 Servidores:</b> %d entradas (%d diferentes, %d repetidas)\n<b>🍈 Coletadas (%d):</b>\n%s\n<b>🚫 Ignoradas (%d):</b>\n%s",
+        minutos,Report.Interval,s.Servers,diferentes,repetidas,reportSoma(s.Collected),reportLinhas(s.Collected),reportSoma(s.Ignored),reportLinhas(s.Ignored))
 end
 function Report.Refresh()
     if Report.Label then pcall(function() Report.Label:SetText(Report.Texto()) end) end
@@ -199,6 +212,7 @@ function Report.Add(kind,nome)
         if s.LastServer==game.JobId then return end
         s.LastServer=game.JobId
         s.Servers+=1
+        s.ServerIds[game.JobId]=(s.ServerIds[game.JobId] or 0)+1
     else
         local lista=kind=="Collected" and s.Collected or s.Ignored
         nome=reportNome(nome)
@@ -679,7 +693,10 @@ function Report.Send(manual)
             description="Conta: **"..player.Name.."**"..(manual and " (envio manual)" or ""),
             color=3447003,
             fields={
-                {name="🌐 Servidores visitados",value=tostring(s.Servers),inline=true},
+                {name="🌐 Servidores visitados",value=(function()
+                    local diferentes,repetidas=Report.Servidores(s)
+                    return s.Servers.." entradas\n"..diferentes.." diferentes\n"..repetidas.." repetidas"
+                end)(),inline=true},
                 {name="🍈 Frutas coletadas",value=tostring(Report.Soma(s.Collected)),inline=true},
                 {name="🚫 Frutas ignoradas",value=tostring(Report.Soma(s.Ignored)),inline=true},
                 {name="Coletadas",value=campo(Report.Linhas(s.Collected))},
