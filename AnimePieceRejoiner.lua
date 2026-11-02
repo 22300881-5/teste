@@ -600,7 +600,10 @@ local function aguardarPersonagemEstavel()
 end
 
 -- Mesmo webhook de inventário utilizado em KING_LEGACY/Sea_2.luau.
-local FRUIT_WEBHOOK_URL = "https://discord.com/api/webhooks/1551358406344835122/jUlRuIxUAy4ZgCaPGNIMTY4c_c0gO6fhiTiM9BxMrBlgGAYZbuV8Liujechrk747HUzN"
+-- Avisos de fruta mítica.
+local FRUIT_WEBHOOK_URL = "https://discord.com/api/webhooks/1566669463007264848/YznIvWbv27S6iwllywSVEBJvLsD4o2p9tS4Ub7KPINSfhHI5TaM-PY0W0OnFc7RMNkmg"
+-- Relatório periódico do farm (farm log).
+local REPORT_WEBHOOK_URL = "https://discord.com/api/webhooks/1566669502568071278/1TyO-Eliu1rJFukLLmqwppX6onPHy8hnBHBeohnwxnGz2OePgY4hXqMLpPqHAv_rnR9f"
 local miticasNotificadas = {}
 local notificacoesPendentes = 0
 
@@ -664,7 +667,7 @@ local function enviarWebhook(body)
     if type(request)~="function" then return false,"Executor sem request" end
     for _=1,3 do
         local ok,response=pcall(function()
-            return request({Url=FRUIT_WEBHOOK_URL,Method="POST",Headers={["Content-Type"]="application/json"},Body=body})
+            return request({Url=REPORT_WEBHOOK_URL,Method="POST",Headers={["Content-Type"]="application/json"},Body=body})
         end)
         if ok and response and response.StatusCode>=200 and response.StatusCode<300 then return true end
         if ok and response and response.StatusCode==429 then
