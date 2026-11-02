@@ -198,7 +198,9 @@ function Report.Texto()
     local s=Report.State
     local minutos=math.floor((os.time()-s.Start)/60)
     local diferentes,repetidas=reportServidores(s)
-    return string.format("<b>⏱ Período atual:</b> %d / %d min\n<b>🌐 Servidores:</b> %d entradas (%d diferentes, %d repetidas)\n<b>🍈 Coletadas (%d):</b>\n%s\n<b>🚫 Ignoradas (%d):</b>\n%s",
+    local horas=math.max(60,os.time()-s.Start)/3600
+    local ritmo=string.format("%.1f servidores/h · %.1f frutas/h",s.Servers/horas,reportSoma(s.Collected)/horas)
+    return string.format("<b>⏱ Período atual:</b> %d / %d min\n<b>⚡ Ritmo:</b> "..ritmo.."\n<b>🌐 Servidores:</b> %d entradas (%d diferentes, %d repetidas)\n<b>🍈 Coletadas (%d):</b>\n%s\n<b>🚫 Ignoradas (%d):</b>\n%s",
         minutos,Report.Interval,s.Servers,diferentes,repetidas,reportSoma(s.Collected),reportLinhas(s.Collected),reportSoma(s.Ignored),reportLinhas(s.Ignored))
 end
 function Report.Refresh()
@@ -688,12 +690,33 @@ function Report.Send(manual)
     local s=Report.State
     local minutos=math.max(1,math.floor((os.time()-s.Start)/60))
     local function campo(texto) return #texto>1000 and texto:sub(1,997).."..." or texto end
-    local body=HttpService:JSONEncode({
+    local coletadas=Report.Soma(s.Collected)
+    local ignoradas=Report.Soma(s.Ignored)
+    -- Ritmo por hora com base na duração real do período.
+    local horas=math.max(1,os.time()-s.Start)/3600
+    local function porHora(valor) return string.format("%.1f",valor/horas):gsub("%.0$","") end
+    local ritmo=porHora(s.Servers).." servidores/h · "..porHora(coletadas).." frutas/h"
+    local body
+    if s.Servers==0 and coletadas==0 and ignoradas==0 then
+        -- Período sem atividade: alerta curto em vez de relatório zerado (sinal de conta travada).
+        body=HttpService:JSONEncode({
+            username="AnimePiece",
+            allowed_mentions={parse={}},
+            embeds={{
+                title="⚠️ "..player.Name.." sem atividade nos últimos "..minutos.." min",
+                description="Nenhum servidor visitado e nenhuma fruta encontrada. A conta pode estar travada."
+                    ..(Runtime.LastStatus and ("\nÚltimo status: "..tostring(Runtime.LastStatus)) or ""),
+                color=15105570,
+                timestamp=DateTime.now():ToIsoDate(),
+            }},
+        })
+    else
+    body=HttpService:JSONEncode({
         username="AnimePiece",
         allowed_mentions={parse={}},
         embeds={{
             title="Relatório de farm — "..minutos.." min",
-            description="Conta: **"..player.Name.."**"..(manual and " (envio manual)" or ""),
+            description="Conta: **"..player.Name.."**"..(manual and " (envio manual)" or "").."\n⚡ "..ritmo,
             color=3447003,
             fields={
                 {name="🌐 Servidores visitados",value=(function()
@@ -708,6 +731,7 @@ function Report.Send(manual)
             timestamp=DateTime.now():ToIsoDate(),
         }},
     })
+    end
     local ok,err=enviarWebhook(body)
     Report.Sending=false
     if ok then
