@@ -132,6 +132,89 @@ local function deliveryStatus(text)
     if Delivery.Label then pcall(function() Delivery.Label:SetText(text) end) end
 end
 Runtime.Delivery=Delivery
+
+-- Relatório periódico (servidores, frutas coletadas e ignoradas). Fica salvo em arquivo porque o
+-- script reinicia a cada servidor; o período continua contando entre as trocas.
+local Report={Enabled=true,Interval=30,Folder="AnimePiece",
+    File="AnimePiece/Relatorio_"..game.PlaceId.."_"..player.UserId..".json"}
+local function reportNew()
+    -- LastServer evita recontar o servidor atual logo após zerar o período.
+    return {Start=os.time(),Servers=0,Collected={},Ignored={},LastServer=game.JobId}
+end
+local function reportLoad()
+    local data
+    pcall(function()
+        if type(isfile)=="function" and isfile(Report.File) then data=HttpService:JSONDecode(readfile(Report.File)) end
+    end)
+    if type(data)~="table" or type(data.Start)~="number" then
+        local fresh=reportNew()
+        fresh.LastServer=nil
+        return fresh
+    end
+    data.Servers=tonumber(data.Servers) or 0
+    if type(data.Collected)~="table" then data.Collected={} end
+    if type(data.Ignored)~="table" then data.Ignored={} end
+    return data
+end
+function Report.Save()
+    if type(writefile)~="function" then return end
+    pcall(function()
+        if type(isfolder)=="function" and type(makefolder)=="function" and not isfolder(Report.Folder) then makefolder(Report.Folder) end
+        writefile(Report.File,HttpService:JSONEncode(Report.State))
+    end)
+end
+local function reportNome(nome)
+    nome=tostring(nome or "?"):gsub("<[^>]+>",""):gsub("^%s+",""):gsub("%s+$","")
+    return nome~="" and nome or "?"
+end
+local function reportSoma(lista)
+    local total=0
+    for _,quantidade in pairs(lista) do total+=quantidade end
+    return total
+end
+local function reportLinhas(lista)
+    local nomes={}
+    for nome in pairs(lista) do nomes[#nomes+1]=nome end
+    table.sort(nomes,function(a,b) return lista[a]>lista[b] or lista[a]==lista[b] and a<b end)
+    local linhas={}
+    for _,nome in ipairs(nomes) do linhas[#linhas+1]="• "..nome.." ×"..lista[nome] end
+    return #linhas>0 and table.concat(linhas,"\n") or "Nenhuma"
+end
+Report.Linhas=reportLinhas
+Report.Soma=reportSoma
+function Report.Texto()
+    local s=Report.State
+    local minutos=math.floor((os.time()-s.Start)/60)
+    return string.format("<b>⏱ Período atual:</b> %d / %d min\n<b>🌐 Servidores:</b> %d\n<b>🍈 Coletadas (%d):</b>\n%s\n<b>🚫 Ignoradas (%d):</b>\n%s",
+        minutos,Report.Interval,s.Servers,reportSoma(s.Collected),reportLinhas(s.Collected),reportSoma(s.Ignored),reportLinhas(s.Ignored))
+end
+function Report.Refresh()
+    if Report.Label then pcall(function() Report.Label:SetText(Report.Texto()) end) end
+end
+-- kind: "Server", "Collected" ou "Ignored".
+function Report.Add(kind,nome)
+    local s=Report.State
+    if kind=="Server" then
+        -- O registro do servidor roda mais de uma vez por entrada; conta cada JobId uma vez.
+        if s.LastServer==game.JobId then return end
+        s.LastServer=game.JobId
+        s.Servers+=1
+    else
+        local lista=kind=="Collected" and s.Collected or s.Ignored
+        nome=reportNome(nome)
+        lista[nome]=(lista[nome] or 0)+1
+    end
+    Report.Save()
+    Report.Refresh()
+end
+function Report.Reset()
+    Report.State=reportNew()
+    Report.Save()
+    Report.Refresh()
+end
+Report.State=reportLoad()
+Runtime.Report=Report
+
 -- Uma falha ao baixar a UI não encerra a automação.
 local function criarInterface()
 	local saveDeliveryOptions
@@ -220,6 +303,20 @@ local function criarInterface()
         Library.Toggles.AutoRejoinEnabled:SetValue(false)
         deliveryStatus("Entrega cancelada e rejoin pausado. Confira as frutas da mochila e do chão antes de continuar.")
     end})
+    local reportTab=Window:AddTab("Relatório","clipboard-list")
+    local reportBox=reportTab:AddGroupbox({Side="Left",Name="📊 Período atual"})
+    local reportConfig=reportTab:AddGroupbox({Side="Right",Name="📨 Envio para o Discord"})
+    Report.Label=reportBox:AddLabel(Report.Texto(),true)
+    reportConfig:AddToggle("ReportEnabled",{Text="Enviar relatório ao Discord",Default=true,
+        Callback=function(value) Report.Enabled=value if saveDeliveryOptions then saveDeliveryOptions() end end})
+    reportConfig:AddSlider("ReportInterval",{Text="Intervalo do relatório (min)",Default=30,Min=5,Max=180,Rounding=0,
+        Callback=function(value) Report.Interval=value Report.Refresh() if saveDeliveryOptions then saveDeliveryOptions() end end})
+    reportConfig:AddButton({Text="📨 Enviar agora e iniciar novo período",Func=function()
+        if Report.Send then task.spawn(Report.Send,true) end
+    end})
+    reportConfig:AddButton({Text="🗑 Zerar período sem enviar",Func=Report.Reset})
+    Report.StatusLabel=reportConfig:AddLabel("Último envio: nenhum nesta execução.",true)
+    reportConfig:AddLabel("O período continua contando entre trocas de servidor. Servidores de entrega não entram na contagem. Frutas ignoradas são as da lista de bloqueio (Kilo, Copy, Warrior, Bomb).",true)
 	local movement = tab:AddGroupbox({Side = "Right", Name = "Movimento"})
 	local config = tab:AddGroupbox({Side = "Right", Name = "Salvamento"})
 	local saveLabel = config:AddLabel("Carregando configurações...", true)
@@ -548,6 +645,69 @@ local function notificarMitica(nome)
 	end)
 end
 
+-- Envia o relatório do período e começa um novo. Só zera depois que o Discord confirmar.
+local function enviarWebhook(body)
+    if type(request)~="function" then return false,"Executor sem request" end
+    for _=1,3 do
+        local ok,response=pcall(function()
+            return request({Url=FRUIT_WEBHOOK_URL,Method="POST",Headers={["Content-Type"]="application/json"},Body=body})
+        end)
+        if ok and response and response.StatusCode>=200 and response.StatusCode<300 then return true end
+        if ok and response and response.StatusCode==429 then
+            local delay=2
+            pcall(function() delay=tonumber(HttpService:JSONDecode(response.Body).retry_after) or 2 end)
+            task.wait(math.max(delay,1))
+        elseif not ok or (response and response.StatusCode>=500) then
+            task.wait(2)
+        else
+            return false,"HTTP "..tostring(response and response.StatusCode)
+        end
+    end
+    return false,"Sem resposta do Discord"
+end
+function Report.Send(manual)
+    if Report.Sending then return end
+    Report.Sending=true
+    local s=Report.State
+    local minutos=math.max(1,math.floor((os.time()-s.Start)/60))
+    local function campo(texto) return #texto>1000 and texto:sub(1,997).."..." or texto end
+    local body=HttpService:JSONEncode({
+        username="AnimePiece",
+        allowed_mentions={parse={}},
+        embeds={{
+            title="Relatório de farm — "..minutos.." min",
+            description="Conta: **"..player.Name.."**"..(manual and " (envio manual)" or ""),
+            color=3447003,
+            fields={
+                {name="🌐 Servidores visitados",value=tostring(s.Servers),inline=true},
+                {name="🍈 Frutas coletadas",value=tostring(Report.Soma(s.Collected)),inline=true},
+                {name="🚫 Frutas ignoradas",value=tostring(Report.Soma(s.Ignored)),inline=true},
+                {name="Coletadas",value=campo(Report.Linhas(s.Collected))},
+                {name="Ignoradas",value=campo(Report.Linhas(s.Ignored))},
+            },
+            timestamp=DateTime.now():ToIsoDate(),
+        }},
+    })
+    local ok,err=enviarWebhook(body)
+    Report.Sending=false
+    if ok then
+        Report.Reset()
+        if Report.StatusLabel then pcall(function() Report.StatusLabel:SetText("Último envio: "..os.date("%H:%M").." ✓") end) end
+    else
+        -- Mantém os dados para tentar de novo em 5 minutos.
+        Report.RetryAt=os.time()+300
+        if Report.StatusLabel then pcall(function() Report.StatusLabel:SetText("Falha no envio ("..tostring(err).."); nova tentativa em 5 min.") end) end
+    end
+end
+task.spawn(function()
+    while Runtime.Alive do
+        Report.Refresh()
+        local due=os.time()-Report.State.Start>=Report.Interval*60
+        if Report.Enabled and due and os.time()>=(Report.RetryAt or 0) then pcall(Report.Send,false) end
+        task.wait(30)
+    end
+end)
+
 local function verificarMiticaHandle(handle)
 	local atual = handle
 	while atual and atual ~= droppedTools do
@@ -605,6 +765,7 @@ local function handleBloqueado(handle)
 	if bloqueado and blacklistAvisada[handle] ~= nomeFruta then
 		blacklistAvisada[handle] = nomeFruta
 		print("Fruta ignorada (blacklist): " .. nomeFruta)
+		Report.Add("Ignored", nomeFruta)
 	end
 	return bloqueado
 end
@@ -1196,7 +1357,7 @@ local function coletarHandle(handle)
 	if not fruta then
 		return false
 	end
-
+	Report.Add("Collected", fruta.Name)
 
 	return armazenarFruta(fruta, character)
     end)
@@ -1520,6 +1681,7 @@ local function registrarServidorAtual()
     if Delivery.JobId==game.JobId then return end
     Hop.Visited[game.JobId]=os.time()
     saveServerHistory()
+    Report.Add("Server")
     sharedUpdate(function(data,epoch)
         data.Visited[game.JobId]=epoch
         data.Claims[game.JobId]=nil
