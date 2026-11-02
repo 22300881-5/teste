@@ -1907,6 +1907,14 @@ local function verificarLocalizacoes(fruitsOnly)
         if not storageOk then registrarErro("Guardar frutas",storageError) end
     end
     flushFruitStorage()
+    -- Ao terminar, aguarda num spawnpoint sorteado em vez de ficar sempre na última ilha visitada.
+    if Runtime.Alive and #localizacoes>0 then
+        local destino=localizacoes[math.random(1,#localizacoes)]
+        print("Main | Varredura concluída; aguardando em:",tostring(destino.Nome))
+        local ok,err=pcall(chegarNaIlha,destino,1,1)
+        if not ok then registrarErro("Spawn final",err) end
+        atualizarStatus("Varredura concluída; aguardando em "..tostring(destino.Nome)..".")
+    end
     return "varredura_concluida"
 end
 
