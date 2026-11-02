@@ -789,6 +789,8 @@ local SPAWN_POSITIONS={
     OnlineIsland=Vector3.new(3494.39208984375,38.338645935058594,2554.70263671875),
     SorcerersIsland=Vector3.new(4063.24853515625,14.25,178.9741668701172),
     ["Good House"]=Vector3.new(2805.0224609375,13.232160568237305,-2673.62744140625),
+    -- Mesma posição usada no AutoLevel (ilha do Crimson King).
+    ["Tremor Island"]=Vector3.new(-1373.74707,10.36897,1370.02185),
 }
 local function salvarLocalizacoesSpawn()
     local saved={}
@@ -801,7 +803,7 @@ local function salvarLocalizacoesSpawn()
         end
     end
     local result={}
-    for _,name in ipairs({"Foosha","JungleIsland","WestIsland","OnlineIsland","SorcerersIsland","Good House"}) do
+    for _,name in ipairs({"Foosha","JungleIsland","WestIsland","OnlineIsland","SorcerersIsland","Good House","Tremor Island"}) do
         table.insert(result,{Nome=name,Origem="Spawnpoint."..name,CFrame=saved[name]})
     end
     return result
