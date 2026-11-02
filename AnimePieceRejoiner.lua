@@ -2341,22 +2341,34 @@ end)
 -- outros sinais e alguns executores não preenchem conexao.Script. Por isso varre vários sinais,
 -- identifica a origem por mais de um caminho e repete a varredura enquanto o Main roda.
 local ANTI_WELD_NAME = "Anti Enemy Weld"
-local function origemDaConexao(conexao)
-    local ok, origem = pcall(function() return conexao.Script end)
-    if ok and typeof(origem) == "Instance" then return origem end
-    local okF, fn = pcall(function() return conexao.Function end)
-    if okF and type(fn) == "function" then
-        local okEnv, env = pcall(getfenv, fn)
-        if okEnv and type(env) == "table" and typeof(rawget(env, "script")) == "Instance" then return rawget(env, "script") end
-        if debug and debug.info then
-            local okSrc, source = pcall(debug.info, fn, "s")
-            if okSrc and type(source) == "string" and source:find(ANTI_WELD_NAME, 1, true) then return source end
-        end
+-- O Anti Enemy Weld é um ModuleScript (ReplicatedStorage.Client.Client Anti Exploiter.Anti Enemy Weld).
+-- Em conexões criadas por módulo, conexao.Script aponta para o script que fez o require, não para o
+-- módulo. Por isso a conexão é testada por todas as origens possíveis, não só pela primeira.
+local function ehAntiWeldNome(valor)
+    if typeof(valor) == "Instance" then
+        local ok, caminho = pcall(function() return valor:GetFullName() end)
+        return valor.Name == ANTI_WELD_NAME or (ok and caminho:find(ANTI_WELD_NAME, 1, true) ~= nil)
     end
+    return type(valor) == "string" and valor:find(ANTI_WELD_NAME, 1, true) ~= nil
 end
-local function ehAntiWeld(origem)
-    if typeof(origem) == "Instance" then return origem.Name == ANTI_WELD_NAME end
-    return type(origem) == "string" and origem:find(ANTI_WELD_NAME, 1, true) ~= nil
+local function conexaoDoAntiWeld(conexao)
+    local ok, origem = pcall(function() return conexao.Script end)
+    if ok and ehAntiWeldNome(origem) then return true end
+    local okF, fn = pcall(function() return conexao.Function end)
+    if not okF or type(fn) ~= "function" then return false end
+    -- Script dono da função (no módulo, é o próprio ModuleScript).
+    local okEnv, env = pcall(getfenv, fn)
+    if okEnv and type(env) == "table" and ehAntiWeldNome(rawget(env, "script")) then return true end
+    -- Nome do arquivo de origem da função.
+    if debug and debug.info then
+        local okSrc, source = pcall(debug.info, fn, "s")
+        if okSrc and ehAntiWeldNome(source) then return true end
+    end
+    if type(debug) == "table" and type(debug.getinfo) == "function" then
+        local okInfo, info = pcall(debug.getinfo, fn)
+        if okInfo and type(info) == "table" and (ehAntiWeldNome(info.source) or ehAntiWeldNome(info.short_src)) then return true end
+    end
+    return false
 end
 local function varrerConexoesAntiWeld()
     if type(getconnections) ~= "function" then return 0 end
@@ -2367,7 +2379,7 @@ local function varrerConexoesAntiWeld()
         if okS and evento then
             local okC, lista = pcall(getconnections, evento)
             for _, conexao in ipairs(okC and lista or {}) do
-                if ehAntiWeld(origemDaConexao(conexao)) then
+                if conexaoDoAntiWeld(conexao) then
                     if pcall(function() conexao:Disconnect() end) then removidas += 1 end
                 end
             end
