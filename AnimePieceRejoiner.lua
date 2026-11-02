@@ -140,7 +140,7 @@ local Report={Enabled=true,Interval=30,Folder="AnimePiece",
 local function reportNew()
     -- LastServer evita recontar o servidor atual logo após zerar o período.
     -- ServerIds: entradas por JobId, para separar servidores diferentes de repetidos.
-    return {Start=os.time(),Servers=0,ServerIds={},Collected={},Ignored={},LastServer=game.JobId}
+    return {Start=os.time(),Servers=0,Scanned=0,Skipped=0,Failed=0,ServerIds={},Collected={},Ignored={},LastServer=game.JobId}
 end
 local function reportLoad()
     local data
@@ -156,6 +156,9 @@ local function reportLoad()
     if type(data.Collected)~="table" then data.Collected={} end
     if type(data.Ignored)~="table" then data.Ignored={} end
     if type(data.ServerIds)~="table" then data.ServerIds={} end
+    data.Scanned=tonumber(data.Scanned) or 0
+    data.Skipped=tonumber(data.Skipped) or 0
+    data.Failed=tonumber(data.Failed) or 0
     return data
 end
 -- Retorna: servidores diferentes e entradas repetidas no período.
@@ -200,13 +203,13 @@ function Report.Texto()
     local diferentes,repetidas=reportServidores(s)
     local horas=math.max(60,os.time()-s.Start)/3600
     local ritmo=string.format("%.1f servidores/h · %.1f frutas/h",s.Servers/horas,reportSoma(s.Collected)/horas)
-    return string.format("<b>⏱ Período atual:</b> %d / %d min\n<b>⚡ Ritmo:</b> "..ritmo.."\n<b>🌐 Servidores:</b> %d entradas (%d diferentes, %d repetidas)\n<b>🍈 Coletadas (%d):</b>\n%s\n<b>🚫 Ignoradas (%d):</b>\n%s",
-        minutos,Report.Interval,s.Servers,diferentes,repetidas,reportSoma(s.Collected),reportLinhas(s.Collected),reportSoma(s.Ignored),reportLinhas(s.Ignored))
+    return string.format("<b>⏱ Período atual:</b> %d / %d min\n<b>⚡ Ritmo:</b> "..ritmo.."\n<b>🌐 Servidores:</b> %d entradas (%d diferentes, %d repetidas)\n<b>🔎 Varridos:</b> %d | <b>⏭ Pulados (&lt;30 min):</b> %d | <b>❌ Com erro:</b> %d\n<b>🍈 Coletadas (%d):</b>\n%s\n<b>🚫 Ignoradas (%d):</b>\n%s",
+        minutos,Report.Interval,s.Servers,diferentes,repetidas,s.Scanned or 0,s.Skipped or 0,s.Failed or 0,reportSoma(s.Collected),reportLinhas(s.Collected),reportSoma(s.Ignored),reportLinhas(s.Ignored))
 end
 function Report.Refresh()
     if Report.Label then pcall(function() Report.Label:SetText(Report.Texto()) end) end
 end
--- kind: "Server", "Collected" ou "Ignored".
+-- kind: "Server", "Scanned", "Skipped", "Collected" ou "Ignored".
 function Report.Add(kind,nome)
     local s=Report.State
     if kind=="Server" then
@@ -215,6 +218,8 @@ function Report.Add(kind,nome)
         s.LastServer=game.JobId
         s.Servers+=1
         s.ServerIds[game.JobId]=(s.ServerIds[game.JobId] or 0)+1
+    elseif kind=="Scanned" or kind=="Skipped" or kind=="Failed" then
+        s[kind]=(s[kind] or 0)+1
     else
         local lista=kind=="Collected" and s.Collected or s.Ignored
         nome=reportNome(nome)
@@ -551,7 +556,8 @@ end
 
 local function carregarDependencias()
 	backpack = aguardarObjeto(player, "Backpack")
-	characterFolder = aguardarObjeto(workspace, "ClientPlayer")
+	-- workspace.ClientPlayer não é usado e às vezes não existe; esperar por ela cancelava a varredura.
+	characterFolder = workspace:FindFirstChild("ClientPlayer")
 	world = aguardarObjeto(workspace, "World")
 	interactive = aguardarObjeto(aguardarObjeto(aguardarObjeto(world, "IgnoreList"), "Npcs"), "Interactive")
 	droppedTools = aguardarObjeto(aguardarObjeto(world, "Playability"), "DroppedTools")
@@ -711,23 +717,34 @@ function Report.Send(manual)
             }},
         })
     else
+    local diferentes,repetidas=Report.Servidores(s)
+    local varridos,pulados,falhas=s.Scanned or 0,s.Skipped or 0,s.Failed or 0
+    local mediaServidor=s.Servers>0 and math.floor((os.time()-s.Start)/s.Servers+.5) or 0
+    local servidores=string.format("**%d** entradas · **%d** diferentes%s\n🔎 **%d** varridos · ⏭ **%d** pulados (<30 min)%s\n⏱ média de **%ds** por servidor",
+        s.Servers,diferentes,repetidas>0 and (" · ⚠️ "..repetidas.." repetidas") or "",varridos,pulados,
+        falhas>0 and (" · ❌ **"..falhas.."** com erro") or "",mediaServidor)
+    local fields={
+        {name="🌐 Servidores",value=servidores},
+        {name="🍈 Coletadas ("..coletadas..")",value=coletadas>0 and campo(Report.Linhas(s.Collected)) or "—",inline=true},
+        {name="🚫 Ignoradas ("..ignoradas..")",value=ignoradas>0 and campo(Report.Linhas(s.Ignored)) or "—",inline=true},
+    }
+    -- Quase tudo pulado: a varredura praticamente não aconteceu no período.
+    if s.Servers>=5 and varridos==0 then
+        local motivo=falhas>pulados
+            and "a varredura falhou com erro na maioria dos servidores"..(Runtime.LastError and (" (último: "..tostring(Runtime.LastError):sub(1,150)..")") or "")
+            or "os servidores tinham menos de 30 min"
+        table.insert(fields,{name="⚠️ Atenção",value="Nenhum servidor foi varrido: "..motivo.."."})
+    end
     body=HttpService:JSONEncode({
         username="AnimePiece",
         allowed_mentions={parse={}},
         embeds={{
-            title="Relatório de farm — "..minutos.." min",
-            description="Conta: **"..player.Name.."**"..(manual and " (envio manual)" or "").."\n⚡ "..ritmo,
-            color=3447003,
-            fields={
-                {name="🌐 Servidores visitados",value=(function()
-                    local diferentes,repetidas=Report.Servidores(s)
-                    return s.Servers.." entradas\n"..diferentes.." diferentes\n"..repetidas.." repetidas"
-                end)(),inline=true},
-                {name="🍈 Frutas coletadas",value=tostring(Report.Soma(s.Collected)),inline=true},
-                {name="🚫 Frutas ignoradas",value=tostring(Report.Soma(s.Ignored)),inline=true},
-                {name="Coletadas",value=campo(Report.Linhas(s.Collected))},
-                {name="Ignoradas",value=campo(Report.Linhas(s.Ignored))},
-            },
+            author={name=player.Name..(manual and " · envio manual" or "")},
+            title="📊 Relatório de farm · "..minutos.." min",
+            description="⚡ **"..ritmo.."**",
+            color=coletadas>0 and 5763719 or 3447003,
+            fields=fields,
+            footer={text="Próximo relatório em "..Report.Interval.." min"},
             timestamp=DateTime.now():ToIsoDate(),
         }},
     })
@@ -2401,7 +2418,9 @@ Runtime.FarmThread = task.spawn(function()
         atualizarStatus("Verificando spawnpoints das ilhas...")
 		if serverTime.Value >= 1800 then
 			Runtime.FarmResult = verificarLocalizacoes()
+			Report.Add("Scanned")
 		else
+			Report.Add("Skipped")
 			Runtime.FarmResult = "servidor_recente"
 			atualizarStatus("Servidor abaixo de 30 minutos; seguindo para troca.")
 		end
@@ -2411,6 +2430,7 @@ Runtime.FarmThread = task.spawn(function()
     if ok then atualizarStatus("Varredura concluída.") end
 	if not ok then
 		registrarErro("Busca/coleta", farmError)
+		Report.Add("Failed")
         if Runtime.CancelChestMovement then pcall(Runtime.CancelChestMovement) Runtime.CancelChestMovement=nil end
         if Runtime.SpinConnection then Runtime.SpinConnection:Disconnect() Runtime.SpinConnection=nil end
         if Runtime.SpinBusy or Runtime.SpinTicket then
